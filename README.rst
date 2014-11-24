@@ -5,7 +5,8 @@ pytram
 This is a python repository for TRAM estimators
 
 **Please note that this code is still under heavy development!**
-**If you have any questions in the meantime please contact the code authors**
+
+**If you have any questions in the meantime please contact the code authors.**
 
 
 Authors
