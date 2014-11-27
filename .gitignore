@@ -1,0 +1,5 @@
+*.pyc
+*.so
+build
+ext/dtram/dtram.c
+.ipynb_checkpoints

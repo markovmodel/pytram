@@ -15,15 +15,15 @@ Authors
 - Christoph Wehmeyer <christoph.wehmeyer@fu-berlin.de>
 - Antonia Mey <antonia.mey@fu-berlin.de>
 - Fabian Paul <fab@physik.tu-berlin.de>
-- Hao Wu  <hwu@zedat.fu-berlin.de>
+- Hao Wu <hwu@zedat.fu-berlin.de>
 - Frank Noé <frank.noe@fu-berlin.de>
 
 
 
 References
 ==========
-- xTRAM: Estimating Equilibrium Expectations from Time-Correlated Simulation Data at Multiple Thermodynamic States Antonia S. J. S. Mey, Hao Wu, and Frank Noé, Phys. Rev. X 4, 041018
-
+- xTRAM: *Estimating Equilibrium Expectations from Time-Correlated Simulation Data at Multiple Thermodynamic States*, Antonia S.J.S. Mey, Hao Wu, and Frank Noé, **Phys. Rev. X** 4, 041018 (2014)
+- dTRAM: *Statistically optimal analysis of state-discretized trajectory data from multiple thermodynamic states*, Hao Wu, Antonia S.J.S. Mey, Edina Rosta, and Frank Noé, **J. Chem. Phys.** (accepted)
 
 
 Copyright notice
