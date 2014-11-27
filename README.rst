@@ -4,7 +4,7 @@ pytram
 
 This is a python repository for transition-based reweighting analyis method (TRAM) estimators
 
-** Goal for first release: Nov 28th 2014, 23:00 CET **
+**Goal for first release: Nov 28th 2014, 23:00 CET**
 
 
 
