@@ -1,5 +1,5 @@
 
-__version__='0.1.0'
+__version__='0.1.1'
 
 # raise custom exceptions onto the pytram package level
 from .estimator import ExpressionError, NotConvergedWarning

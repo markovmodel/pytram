@@ -4,7 +4,9 @@ pytram changelog
 
 Version 0.1.0 (Alpha):
 
-    Implemented the dTRAM estimator, nosetests, and a dTRAM example (iPython notebook)
+    Implemented the dTRAM estimator, nosetests, and a dTRAM example (iPython notebook).
 
+Version 0.1.1 (Alpha):
 
+    Added a second example for dTRAM. Added docstrings for DTRAM and the API function.
 
