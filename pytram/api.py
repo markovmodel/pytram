@@ -18,13 +18,31 @@ from . import NotConvergedWarning, ExpressionError
 #
 ####################################################################################################
 
-def dtram( C_K_ij, gamma_K_ij, maxiter=100, ftol=1.0E-5, verbose=False ):
+def dtram( C_K_ij, gamma_K_i, maxiter=100, ftol=1.0E-5, verbose=False ):
     r"""
-
+    The dTRAM API function
+    
+    Parameters
+    ----------
+    C_K_ij : numpy.ndarray( shape=(T,M,M), dtype=numpy.intc )
+        transition counts between the M discrete Markov states for each of the T thermodynamic ensembles
+    gamma_K_i : numpy.ndarray( shape=(T,M), dtype=numpy.float64 )
+        conversion factors between the T thermodynamic and M discrete Markov states
+    maxiter : int
+        maximum number of SCF iteration steps during the optimisation of the stationary probabilities
+    ftol : float (> 0.0)
+        convergence criterion based on the max relative change in an SCF iteration step
+    verbose : boolean
+        writes convergence information to stdout during the SCF cycle
+    
+    Returns
+    -------
+    dtram_obj : object
+        dTRAM estimator object with optimised unbiased stationary probabilities
     """
     # try to create the DTRAM object
     try:
-        dtram_obj = DTRAM( C_K_ij, gamma_K_ij )
+        dtram_obj = DTRAM( C_K_ij, gamma_K_i )
     except ExpressionError, e:
         print "# ERROR ############################################################################"
         print "# Your input was faulty!"

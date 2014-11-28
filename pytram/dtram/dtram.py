@@ -22,7 +22,7 @@ from .ext import nu_K_ij_equation, pi_i_equation, p_K_ij_equation
 
 class DTRAM( Estimator ):
     r"""
-    I am the dTRAM estimator
+    The dTRAM estimator class
     """
     def __init__( self, C_K_ij, gamma_K_i ):
         r"""
@@ -30,6 +30,10 @@ class DTRAM( Estimator ):
         
         Parameters
         ----------
+        C_K_ij : numpy.ndarray( shape=(T,M,M), dtype=numpy.intc )
+            transition counts between the M discrete Markov states for each of the T thermodynamic ensembles
+        gamma_K_i : numpy.ndarray( shape=(T,M), dtype=numpy.float64 )
+            conversion factors between the T thermodynamic and M discrete Markov states
         """
         super( DTRAM, self ).__init__( C_K_ij )
         self.gamma_K_i = gamma_K_i
@@ -47,6 +51,18 @@ class DTRAM( Estimator ):
     ############################################################################
 
     def scf_iteration( self, maxiter=100, ftol=1.0E-5, verbose=False ):
+        r"""
+        Run the SCF cycle to optimise the unbiased stationary probabilities (and Langrange multipliers)
+        
+        Parameters
+        ----------
+        maxiter : int
+            maximum number of SCF iteration steps
+        ftol : float (> 0.0)
+            convergence criterion based on the max relative change in an SCF iteration step
+        verbose : boolean
+            writes convergence information to stdout during the SCF cycle
+        """
         finc = None
         if verbose:
             print "# %8s %16s" % ( "[Step]", "[rel. Increment]" )
@@ -109,6 +125,14 @@ class DTRAM( Estimator ):
     ############################################################################
 
     def estimate_transition_matrix( self ):
+        r"""
+        Estimate the transition matrices for all thermodynamic states
+        
+        Returns
+        -------
+        p_K_ij : numpy.ndarray( shape=(T,M,M), dtype=numpy.float64 )
+            the transition matrices for the T thermodynamic and M discrete Markov states
+        """
         p_K_ij = np.zeros( shape=self.C_K_ij.shape, dtype=np.float64 )
         p_K_ij_equation( self.nu_K_i, self.gamma_K_i, self.pi_i, self.C_K_ij, p_K_ij )
         return p_K_ij
