@@ -1,0 +1,31 @@
+
+Getting started with pytram
+===========================
+
+
+STEP 0) Get the package from https://github.com/markovmodel/pytram
+
+
+STEP 1) Build the extensions using the command
+
+            python setup.py build_ext --inplace
+
+
+STEP 2) Test the package using the command
+
+            python setup.py nosetests
+
+
+STEP 3) Run the dTRAM example iPython notebook using the command
+        
+            ipython notebook dTRAM_example.ipynb
+
+        and have a look how the API works for the given examples
+
+
+STEP 3) [OPTIONAL] Install and test the package; use
+
+            python setup.py install
+
+
+STEP 4) [OPTIONAL] Follow this example and try it with your own application
