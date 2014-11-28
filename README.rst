@@ -2,7 +2,7 @@
 pytram
 ******
 
-This is a python repository for transition-based reweighting analyis method (TRAM) estimators
+This is a python repository for the transition-based reweighting analyis method (TRAM) estimators.
 
 **Goal for first release: Nov 28th 2014, 23:00 CET**
 
@@ -23,6 +23,7 @@ References
 ==========
 - dTRAM: *Statistically optimal analysis of state-discretized trajectory data from multiple thermodynamic states*, Hao Wu, Antonia S.J.S. Mey, Edina Rosta, and Frank Noé, **J. Chem. Phys.** (accepted)
 - xTRAM: *Estimating Equilibrium Expectations from Time-Correlated Simulation Data at Multiple Thermodynamic States*, Antonia S.J.S. Mey, Hao Wu, and Frank Noé, **Phys. Rev. X** 4, 041018 (2014)
+
 
 
 Copyright notice
