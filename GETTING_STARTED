@@ -27,5 +27,9 @@ STEP 4) [OPTIONAL] Install and test the package; use
 
             python setup.py install
 
+        or
 
-STEP 5) [OPTIONAL] Follow this example and try it with your own application
+            pip install .
+
+
+STEP 5) [OPTIONAL] Follow these examples and try TRAM with your own application

@@ -1,3 +1,11 @@
+################################################################################
+#
+#   test_estimator.py - testing the basic estimator class
+#
+#   author: Christoph Wehmeyer <christoph.wehmeyer@fu-berlin.de>
+#
+################################################################################
+
 from nose.tools import assert_raises, assert_equals
 from pytram.estimator import Estimator, ExpressionError
 import numpy as np
