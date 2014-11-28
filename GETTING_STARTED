@@ -23,9 +23,9 @@ STEP 3) Run the dTRAM example iPython notebook using the command
         and have a look how the API works for the given examples
 
 
-STEP 3) [OPTIONAL] Install and test the package; use
+STEP 4) [OPTIONAL] Install and test the package; use
 
             python setup.py install
 
 
-STEP 4) [OPTIONAL] Follow this example and try it with your own application
+STEP 5) [OPTIONAL] Follow this example and try it with your own application
