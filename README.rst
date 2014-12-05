@@ -19,7 +19,7 @@ Authors
 
 References
 ==========
-- dTRAM: *Statistically optimal analysis of state-discretized trajectory data from multiple thermodynamic states*, Hao Wu, Antonia S.J.S. Mey, Edina Rosta, and Frank Noé, **J. Chem. Phys.** (accepted)
+- dTRAM: *Statistically optimal analysis of state-discretized trajectory data from multiple thermodynamic states*, Hao Wu, Antonia S.J.S. Mey, Edina Rosta, and Frank Noé, **J. Chem. Phys.** 141, 214106 (2014)
 - xTRAM: *Estimating Equilibrium Expectations from Time-Correlated Simulation Data at Multiple Thermodynamic States*, Antonia S.J.S. Mey, Hao Wu, and Frank Noé, **Phys. Rev. X** 4, 041018 (2014)
 
 
