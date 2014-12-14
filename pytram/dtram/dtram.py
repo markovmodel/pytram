@@ -124,18 +124,34 @@ class DTRAM( Estimator ):
     #
     ############################################################################
 
-    def estimate_transition_matrix( self ):
+    def estimate_transition_matrices( self ):
         r"""
         Estimate the transition matrices for all thermodynamic states
         
         Returns
         -------
         p_K_ij : numpy.ndarray( shape=(T,M,M), dtype=numpy.float64 )
-            the transition matrices for the T thermodynamic and M discrete Markov states
+            the transition matrices for all thermodynamic states
         """
         p_K_ij = np.zeros( shape=self.C_K_ij.shape, dtype=np.float64 )
         p_K_ij_equation( self.nu_K_i, self.gamma_K_i, self.pi_i, self.C_K_ij, p_K_ij )
         return p_K_ij
+
+    def estimate_transition_matrix( self, I ):
+        r"""
+        Estimate the transition matrices for all thermodynamic states
+        
+        Parameters
+        ----------
+        I : int
+            target thermodynamic state
+        
+        Returns
+        -------
+        p_K_ij[I] : numpy.ndarray( shape=(M,M), dtype=numpy.float64 )
+            the transition matrix for the Ith thermodynamic state
+        """
+        return self.estimate_transition_matrices()[I,:,:]
 
     ############################################################################
     #
