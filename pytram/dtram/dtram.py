@@ -46,23 +46,26 @@ class DTRAM( Estimator ):
 
     ############################################################################
     #
-    #   scf iteration to converge pi_i
+    #   self-consistent-iteration to converge pi_i
     #
     ############################################################################
 
-    def scf_iteration( self, maxiter=100, ftol=1.0E-5, verbose=False ):
+    def sc_iteration( self, maxiter=100, ftol=1.0E-5, verbose=False ):
         r"""
-        Run the SCF cycle to optimise the unbiased stationary probabilities (and Langrange multipliers)
+        Run the self-consistent-iteration cycle to optimise the unbiased stationary probabilities (and Langrange multipliers)
         
         Parameters
         ----------
         maxiter : int
-            maximum number of SCF iteration steps
+            maximum number of self-consistent-iteration steps
         ftol : float (> 0.0)
-            convergence criterion based on the max relative change in an SCF iteration step
+            convergence criterion based on the max relative change in an self-consistent-iteration step
         verbose : boolean
-            writes convergence information to stdout during the SCF cycle
+            writes convergence information to stdout during the self-consistent-iteration cycle
         """
+        # reset internal storage variables
+        self._f_K = None
+        self._pi_K_i = None
         finc = None
         if verbose:
             print "# %8s %16s" % ( "[Step]", "[rel. Increment]" )
@@ -87,9 +90,6 @@ class DTRAM( Estimator ):
             # break loop if we're converged
             if finc < ftol:
                 break
-        # reset internal storage variables
-        self._f_K = None
-        self._pi_K_i = None
         # complain if we're not yet converged
         if finc > ftol:
             raise NotConvergedWarning( "DTRAM", finc )
