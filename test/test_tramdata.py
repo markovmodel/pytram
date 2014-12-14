@@ -7,7 +7,7 @@
 ################################################################################
 
 from nose.tools import assert_true
-from pytram.tramdata import TRAMData
+from pytram import TRAMData
 import numpy as np
 
 def test_Mx_Tx_nMTstates():
