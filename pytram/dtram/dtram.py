@@ -24,7 +24,7 @@ class DTRAM( Estimator ):
     r"""
     The dTRAM estimator class
     """
-    def __init__( self, C_K_ij, gamma_K_i ):
+    def __init__( self, C_K_ij, b_K_i ):
         r"""
         Initialize the DTRAM object
         
@@ -32,11 +32,11 @@ class DTRAM( Estimator ):
         ----------
         C_K_ij : numpy.ndarray( shape=(T,M,M), dtype=numpy.intc )
             transition counts between the M discrete Markov states for each of the T thermodynamic ensembles
-        gamma_K_i : numpy.ndarray( shape=(T,M), dtype=numpy.float64 )
-            conversion factors between the T thermodynamic and M discrete Markov states
+        b_K_i : numpy.ndarray( shape=(T,M), dtype=numpy.float64 )
+            bias energies in the T thermodynamic and M discrete Markov states
         """
         super( DTRAM, self ).__init__( C_K_ij )
-        self.gamma_K_i = gamma_K_i
+        self.gamma_K_i = b_K_i
         # hard-coded initial guess for pi_i and nu_K_i
         self.pi_i = np.ones( shape=(self.n_markov_states,), dtype=np.float64 ) / float( self.n_markov_states )
         self.nu_K_i = C_K_ij.sum( axis=2 ).astype( np.float64 )
@@ -143,21 +143,19 @@ class DTRAM( Estimator ):
     #
     ############################################################################
 
-    def _check_gamma_K_i( self, gamma_K_i ):
-        if None == gamma_K_i:
-            raise ExpressionError( "gamma_K_i", "is None" )
-        if not isinstance( gamma_K_i, (np.ndarray,) ):
-            raise ExpressionError( "gamma_K_i", "invalid type (%s)" % str( type( gamma_K_i ) ) )
-        if 2 != gamma_K_i.ndim:
-            raise ExpressionError( "gamma_K_i", "invalid number of dimensions (%d)" % gamma_K_i.ndim )
-        if gamma_K_i.shape[0] != self.n_therm_states:
-            raise ExpressionError( "gamma_K_i", "unmatching number of thermodynamic states (%d,%d)" % (gamma_K_i.shape[0], self.n_therm_states) )
-        if gamma_K_i.shape[1] != self.n_markov_states:
-            raise ExpressionError( "gamma_K_i", "unmatching number of markov states (%d,%d)" % (gamma_K_i.shape[1], self.n_markov_states) )
-        if np.float64 != gamma_K_i.dtype:
-            raise ExpressionError( "gamma_K_i", "invalid dtype (%s)" % str( gamma_K_i.dtype ) )
-        if not np.all( gamma_K_i > 0.0 ):
-            raise ExpressionError( "gamma_K_i", "contains non-positive elements" )
+    def _check_b_K_i( self, b_K_i ):
+        if None == b_K_i:
+            raise ExpressionError( "b_K_i", "is None" )
+        if not isinstance( b_K_i, (np.ndarray,) ):
+            raise ExpressionError( "b_K_i", "invalid type (%s)" % str( type( b_K_i ) ) )
+        if 2 != b_K_i.ndim:
+            raise ExpressionError( "b_K_i", "invalid number of dimensions (%d)" % b_K_i.ndim )
+        if b_K_i.shape[0] != self.n_therm_states:
+            raise ExpressionError( "b_K_i", "unmatching number of thermodynamic states (%d,%d)" % (b_K_i.shape[0], self.n_therm_states) )
+        if b_K_i.shape[1] != self.n_markov_states:
+            raise ExpressionError( "b_K_i", "unmatching number of markov states (%d,%d)" % (b_K_i.shape[1], self.n_markov_states) )
+        if np.float64 != b_K_i.dtype:
+            raise ExpressionError( "b_K_i", "invalid dtype (%s)" % str( b_K_i.dtype ) )
         return True
 
     @property
@@ -165,10 +163,10 @@ class DTRAM( Estimator ):
         return self._gamma_K_i
 
     @gamma_K_i.setter
-    def gamma_K_i( self, gamma_K_i ):
+    def gamma_K_i( self, b_K_i ):
         self._gamma_K_i = None
-        if self._check_gamma_K_i( gamma_K_i ):
-            self._gamma_K_i = gamma_K_i
+        if self._check_b_K_i( b_K_i ):
+            self._gamma_K_i = np.exp( b_K_i.min() - b_K_i )
 
 
 
