@@ -18,7 +18,7 @@ from . import NotConvergedWarning, ExpressionError
 #
 ####################################################################################################
 
-def dtram( C_K_ij, gamma_K_i, maxiter=100, ftol=1.0E-5, verbose=False ):
+def dtram( C_K_ij, b_K_i, maxiter=100, ftol=1.0E-5, verbose=False ):
     r"""
     The dTRAM API function
     
@@ -26,14 +26,14 @@ def dtram( C_K_ij, gamma_K_i, maxiter=100, ftol=1.0E-5, verbose=False ):
     ----------
     C_K_ij : numpy.ndarray( shape=(T,M,M), dtype=numpy.intc )
         transition counts between the M discrete Markov states for each of the T thermodynamic ensembles
-    gamma_K_i : numpy.ndarray( shape=(T,M), dtype=numpy.float64 )
-        conversion factors between the T thermodynamic and M discrete Markov states
+    b_K_i : numpy.ndarray( shape=(T,M), dtype=numpy.float64 )
+        reduced bias energies at the T thermodynamic and M discrete Markov states
     maxiter : int
         maximum number of SCF iteration steps during the optimisation of the stationary probabilities
     ftol : float (> 0.0)
-        convergence criterion based on the max relative change in an SCF iteration step
+        convergence criterion based on the max relative change in an self-consistent-iteration step
     verbose : boolean
-        writes convergence information to stdout during the SCF cycle
+        writes convergence information to stdout during the self-consistent-iteration cycle
     
     Returns
     -------
@@ -42,21 +42,21 @@ def dtram( C_K_ij, gamma_K_i, maxiter=100, ftol=1.0E-5, verbose=False ):
     """
     # try to create the DTRAM object
     try:
-        dtram_obj = DTRAM( C_K_ij, gamma_K_i )
+        dtram_obj = DTRAM( C_K_ij, b_K_i )
     except ExpressionError, e:
         print "# ERROR ############################################################################"
         print "# Your input was faulty!"
         print "# The < %s > object is malformed: %s" % ( e.expression, e.msg )
         print "# ABORTING #########################################################################"
-        return None
+        raise
     # try to converge the stationary probabilities
     try:
-        dtram_obj.scf_iteration( maxiter=maxiter, ftol=ftol, verbose=verbose )
+        dtram_obj.sc_iteration( maxiter=maxiter, ftol=ftol, verbose=verbose )
     except NotConvergedWarning, e:
         print "# WARNING ##########################################################################"
         print "# dTRAM did not converge within %d steps!" % maxiter
         print "# The last relative increment was %.6e." % e.relative_increment
-        print "# You should run the SCF iteration method again."
+        print "# You should run the < sc_iteration > method again."
         print "# USE RESULTS WITH CARE ############################################################"
     finally:
         return dtram_obj
