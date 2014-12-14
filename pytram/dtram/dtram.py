@@ -139,7 +139,7 @@ class DTRAM( Estimator ):
 
     def estimate_transition_matrix( self, I ):
         r"""
-        Estimate the transition matrices for all thermodynamic states
+        Estimate the transition matrices for one thermodynamic state
         
         Parameters
         ----------
