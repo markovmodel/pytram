@@ -14,11 +14,11 @@ from . import NotConvergedWarning, ExpressionError
 
 ####################################################################################################
 #
-#   dTRAM API function
+#   dTRAM API function using the mathematical expressions at input
 #
 ####################################################################################################
 
-def dtram( C_K_ij, b_K_i, maxiter=100, ftol=1.0E-5, verbose=False ):
+def dtram_me( C_K_ij, b_K_i, maxiter=100, ftol=1.0E-5, verbose=False ):
     r"""
     The dTRAM API function
     
@@ -62,3 +62,35 @@ def dtram( C_K_ij, b_K_i, maxiter=100, ftol=1.0E-5, verbose=False ):
         return dtram_obj
 
 
+
+####################################################################################################
+#
+#   dTRAM API function from TRAMData
+#
+####################################################################################################
+
+def dtram( tramdata, lag, sliding_window=True, maxiter=100, ftol=1.0E-5, verbose=False ):
+    r"""
+    The dTRAM API function
+    
+    Parameters
+    ----------
+    tramdata : object
+        container/converter for TRAM input data
+    lag : int
+        specify the lag time for C_K_ij calculation
+    sliding_window : boolean
+        use sliding windows to calculate C_K_ij
+    maxiter : int
+        maximum number of SCF iteration steps during the optimisation of the stationary probabilities
+    ftol : float (> 0.0)
+        convergence criterion based on the max relative change in an self-consistent-iteration step
+    verbose : boolean
+        writes convergence information to stdout during the self-consistent-iteration cycle
+    
+    Returns
+    -------
+    dtram_obj : object
+        dTRAM estimator object with optimised unbiased stationary probabilities
+    """
+    return dtram_me( tramdata.get_C_K_ij( lag ), tramdata.b_K_i, maxiter=maxiter, ftol=ftol, verbose=verbose )
