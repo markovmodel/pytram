@@ -10,3 +10,10 @@ Version 0.1.1 (Alpha):
 
     Added a second example for dTRAM. Added docstrings for DTRAM and the API function.
 
+Version 0.1.2 (Alpha):
+
+    Added the TRAMData class for easy input data preparation. Adapted API and dTRAM example.
+    Added new dTRAM API function for simple use of TRAMData. Changed dTRAM dependency from
+    reweighting factors to bias energies. Added method for trasnition matrix of a given
+    thermodynamic state.
+
