@@ -4,4 +4,4 @@ build
 ext/dtram/dtram.c
 .ipynb_checkpoints
 pytram.egg-info
-
+setup.cfg
