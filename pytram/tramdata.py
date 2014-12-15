@@ -28,7 +28,8 @@ class TRAMData( object ):
         trajs : list of dictionaries
             each dictionary contains the following entries:
             'm' markov sequence in a 1-D numpy array of integers
-            't' themodynamic sequence in a 1-D numpy array of integers
+            't' thermodynamic sequence in a 1-D numpy array of integers
+            'u' reduced bias energy sequences in a 2-D numpy array of floats
         b_K_i : 2D numpy array 
             contains discrete reduced bias energies
             Default = None
@@ -40,6 +41,7 @@ class TRAMData( object ):
         self._N_K = None
         self._M_x = None
         self._T_x = None
+        self._u_I_x = None
         self.b_K_i = b_K_i
 
     ############################################################################
@@ -144,4 +146,21 @@ class TRAMData( object ):
                 else:
                     t += lag
         return C_K_ij
+
+    ############################################################################
+    #
+    #   u_I_x getter
+    #
+    ############################################################################
+
+    @property
+    def u_I_x( self ):
+        if None == self._u_I_x:
+            self._u_I_x = np.zeros( shape=(self.n_therm_states,self.N_K.sum()), dtype=np.float64 )
+            a = 0
+            for traj in self.trajs:
+                b = a + traj['u'].shape[1]
+                self._u_I_x[:,a:b] = traj['u'][:,:]
+                a = b
+        return self._u_I_x
 
