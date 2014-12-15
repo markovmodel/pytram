@@ -13,7 +13,7 @@ STEP 1) Build the extensions using the command
 
 STEP 2) Test the package using the command
 
-            python setup.py nosetests
+            python setup.py test
 
 
 STEP 3) Run the dTRAM example iPython notebook using the command

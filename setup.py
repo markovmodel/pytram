@@ -56,6 +56,6 @@ setup(
             'pytram',
             'pytram.dtram'
         ],
-    test_suite='test',
+    test_suite='nose.collector',
     scripts=[]
 )
