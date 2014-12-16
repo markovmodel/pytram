@@ -5,6 +5,9 @@ __version__='0.1.2'
 from .estimator import ExpressionError, NotConvergedWarning
 
 # raise the TRAMData class onto the pytram package level
+from .reader import Reader
+
+# raise the TRAMData class onto the pytram package level
 from .tramdata import TRAMData
 
 # raise the dTRAM estimator class onto the pytram package level
