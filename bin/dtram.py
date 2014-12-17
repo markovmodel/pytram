@@ -94,6 +94,19 @@ if '__main__' == __name__:
 
     ############################################################################
     #
+    #   check mandatory command line arguments
+    #
+    ############################################################################
+    if None == args.b_K_i_file:
+        print "ERROR: you must set the --b_K_i_file option!"
+        exit( 1 )
+    if 1 > len( args.files ):
+        print "ERROR: you must give at least one pytram compatible trajectory file!"
+        exit( 1 )
+
+
+    ############################################################################
+    #
     #   write header
     #
     ############################################################################
@@ -123,7 +136,7 @@ if '__main__' == __name__:
     try:
         dtram_obj = DTRAM( tramdata.get_C_K_ij( args.lag ), tramdata.b_K_i )
     except ExpressionError, e:
-        print "### ERROR\n#"
+        print "#\n### ERROR\n#"
         print "# Your input was faulty!"
         print "# The < %s > object is malformed: %s" % ( e.expression, e.msg )
         print "#\n### ABORTING\n\n"
