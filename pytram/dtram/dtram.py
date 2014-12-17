@@ -68,7 +68,7 @@ class DTRAM( Estimator ):
         self._pi_K_i = None
         finc = None
         if verbose:
-            print "# %8s %16s" % ( "[Step]", "[rel. Increment]" )
+            print "# %25s %25s" % ( "[iteration step]", "[relative increment]" )
         # start the iteration loop
         for i in xrange( maxiter ):
             # iterate nu_K_i
@@ -86,7 +86,7 @@ class DTRAM( Estimator ):
             finc = np.max( np.abs( tmp_pi_i - self.pi_i ) / div )
             # write out progress if requested
             if verbose:
-                print "  %8d %16.8e" % ( i+1, finc )
+                print " %25d %25.12e" % ( i+1, finc )
             # break loop if we're converged
             if finc < ftol:
                 break
