@@ -95,9 +95,12 @@ class Reader( object ):
                 return None
             if self.verbose:
                 print "# Reading b_K_i_file <%s>" % self.b_K_i_file
-            self._b_K_i = np.loadtxt( self.b_K_i_file, dtype=np.float64 ).transpose().copy()
-            if self.verbose:
-                print "# ... found %d markov and %d thermodynamic states" % ( self._b_K_i.shape[1], self._b_K_i.shape[0] )
+            try:
+                self._b_K_i = np.loadtxt( self.b_K_i_file, dtype=np.float64 ).transpose().copy()
+                if self.verbose:
+                    print "# ... found %d markov and %d thermodynamic states" % ( self._b_K_i.shape[1], self._b_K_i.shape[0] )
+            except IOError, e:
+                print "# ... cannot read file <%s>" % self.b_K_i_file
         return self._b_K_i
 
 
