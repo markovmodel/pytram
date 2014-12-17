@@ -57,5 +57,7 @@ setup(
             'pytram.dtram'
         ],
     test_suite='nose.collector',
-    scripts=[]
+    scripts=[
+            'bin/dtram.py'
+        ]
 )
