@@ -57,7 +57,11 @@ class Reader( object ):
             for f in self.files:
                 if self.verbose:
                     print "# Reading file <%s>" % f
-                content = np.loadtxt( f, dtype=np.float64, skiprows=self.skiprows )
+                try:
+                    content = np.loadtxt( f, dtype=np.float64, skiprows=self.skiprows )
+                except IOError, e:
+                    print "# ... cannot read file <%s> (ignored)" % f
+                    continue
                 length = content.shape[0]
                 if self.verbose:
                     print "# ... length=%d" % length
@@ -88,9 +92,6 @@ class Reader( object ):
     def b_K_i( self ):
         if None == self._b_K_i:
             if None == self.b_K_i_file:
-                print "# WARNING ##########################################################################"
-                print "# The b_K_i_file < %s > was not supplied!" % self.b_K_i_file
-                print "# RETURNING NONE ###################################################################"
                 return None
             if self.verbose:
                 print "# Reading b_K_i_file <%s>" % self.b_K_i_file
