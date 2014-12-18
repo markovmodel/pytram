@@ -2,6 +2,7 @@ r"""
 .. moduleauthor:: Antonia Mey <antonia.mey@fu-berlin.de>, Christoph Wehmeyer <christoph.wehmeyer@fu-berlin.de>
 
 """
+from .estimator import ExpressionError
 import numpy as np
 
 
@@ -21,7 +22,7 @@ class TRAMData( object ):
     I convert/process the trajectory list of dictionaries into data types that are useful
     
     """
-    def __init__( self, trajs, b_K_i=None ):
+    def __init__( self, trajs, b_K_i=None, kT_K=None, kT_target=None ):
         r"""
         Parameters
         ----------
@@ -43,6 +44,8 @@ class TRAMData( object ):
         self._T_x = None
         self._u_I_x = None
         self.b_K_i = b_K_i
+        self.kT_K = kT_K
+        self.kT_target = kT_target
 
     ############################################################################
     #
@@ -149,18 +152,55 @@ class TRAMData( object ):
 
     ############################################################################
     #
-    #   u_I_x getter
+    #   u_I_x getter and helper functions
     #
     ############################################################################
 
     @property
     def u_I_x( self ):
         if None == self._u_I_x:
-            self._u_I_x = np.zeros( shape=(self.n_therm_states,self.N_K.sum()), dtype=np.float64 )
-            a = 0
-            for traj in self.trajs:
-                b = a + traj['u'].shape[1]
-                self._u_I_x[:,a:b] = traj['u'][:,:]
-                a = b
+            if ( None != self.kT_target ) and ( None != self.kT_K ):
+                self.gen_u_I_x_from_kT_K()
+            else:
+                self.gen_u_I_x()
         return self._u_I_x
+
+    def gen_u_I_x( self ):
+        self._u_I_x = np.zeros( shape=(self.n_therm_states,self.N_K.sum()), dtype=np.float64 )
+        a = 0
+        for traj in self.trajs:
+            b = a + traj['u'].shape[0]
+            self._u_I_x[:,a:b] = traj['u'][:,:].transpose().copy()
+            a = b
+
+    def gen_u_I_x_from_kT_K( self ):
+        u_x = np.zeros( shape=(self.N_K.sum(),), dtype=np.float64 )
+        a = 0
+        for traj in self.trajs:
+            b = a + traj['u'].shape[0]
+            u_x[a:b] = traj['u'][:,0]
+            a = b
+        for K in xrange( self.kT_K.shape[0] ):
+            u_x[( self.T_x == K )] *= self.kT_K[K]
+        self._u_I_x = np.zeros( shape=(self.kT_K.shape[0],self.N_K.sum()), dtype=np.float64 )
+        for I in xrange( self.kT_K.shape[0] ):
+            self._u_I_x[I,:] = ( 1.0/self.kT_K[I] - 1.0/self.kT_K[self.kT_target] ) * u_x[:]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -21,7 +21,7 @@ class Reader( object ):
     I import trajectories from a list of files
     
     """
-    def __init__( self, files, b_K_i_file=None, skiprows=0, maxlength=None, verbose=False ):
+    def __init__( self, files, b_K_i_file=None, kT_file=None, skiprows=0, maxlength=None, verbose=False ):
         r"""
         Parameters
         ----------
@@ -29,6 +29,8 @@ class Reader( object ):
             names of the to-be-imported trajectory files
         b_K_i_file : string (optional)
             name of the file with the discretised reduced bias energies (b_K_i)
+        kT_file : string (optional)
+            name of the file with kT values from a multi-temperature simulation
         skiprows : int (optional)
             skip the leading lines
         maxlength : int (optional)
@@ -38,11 +40,13 @@ class Reader( object ):
         """
         self.files = files
         self.b_K_i_file = b_K_i_file
+        self.kT_file = kT_file
         self.maxlength = maxlength
         self.skiprows = skiprows
         self.verbose = verbose
         self._trajs = None
         self._b_K_i = None
+        self._kT_K= None
 
     ############################################################################
     #
@@ -69,8 +73,8 @@ class Reader( object ):
                     length = self.maxlength
                     if self.verbose:
                         print "# ... truncating to length=%d" % self.maxlength
-                m = content[:length,0].astype( np.int32, copy=True )
-                t = content[:length,1].astype( np.int32, copy=True )
+                m = content[:length,0].astype( np.intc, copy=True )
+                t = content[:length,1].astype( np.intc, copy=True )
                 u = None
                 if content.shape[1] > 2:
                     u = np.copy( content[:length,2:] )
@@ -102,5 +106,30 @@ class Reader( object ):
             except IOError, e:
                 print "# ... cannot read file <%s>" % self.b_K_i_file
         return self._b_K_i
+
+    ############################################################################
+    #
+    #   kT getter
+    #
+    ############################################################################
+
+    @property
+    def kT_K( self ):
+        if None == self._kT_K:
+            if None == self.kT_file:
+                return None
+            if self.verbose:
+                print "# Reading kT_file <%s>" % self.kT_file
+            try:
+                self._kT_K = np.loadtxt( self.kT_file, dtype=np.float64 )
+                if self._kT_K.ndim > 1:
+                    if self.verbose:
+                        print "# ... found %d columns - restricting to first column" % self._kT_K.shape[1]
+                    self._kT_K = self._kT_K[:,0].copy()
+                if self.verbose:
+                    print "# ... found %d thermodynamic states" % self._kT_K.shape[0]
+            except IOError, e:
+                print "# ... cannot read file <%s>" % self.kT_file
+        return self._kT_K
 
 
