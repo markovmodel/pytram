@@ -26,7 +26,7 @@ class XTRAM( Estimator ):
     r"""
     I am the xTRAM estimator
     """
-    def __init__( self, C_K_ij, u_I_x, T_x, M_x, N_K_i, N_K, target = None, verbose = False ):
+    def __init__( self, C_K_ij, u_I_x, T_x, M_x, N_K_i, N_K, target = 0, verbose = False ):
 
         r"""
         Initialize the XTRAM object
@@ -46,7 +46,7 @@ class XTRAM( Estimator ):
         N_K : 1-D numpy array
             Numer of thermodynamic samples array
         target : Integer 
-            target state for which pi_K should be computed
+            target state for which pi_i should be computed
             default : 0
         verbose : Boolean
             Be loud and noisy
@@ -65,6 +65,7 @@ class XTRAM( Estimator ):
         self.pi_K_i = self._compute_pi_K_i()
         self._ftol = 10e-15
         self._maxiter = 1000000
+        self.target = target
         
         
     def sc_iteration( self , ftol=10e-4, maxiter = 10, verbose = False):
@@ -106,6 +107,9 @@ class XTRAM( Estimator ):
                     break
         if finc > ftol:
                 raise NotConvergedWarning( "XTRAM", finc )
+        #now we need to compute the results
+        self.pi_i = self.pi_K_i[target]/self.pi_K_i[target].sum()
+        
 
     def _initialise_X_and_N( self, N_tilde ):
         r"""
