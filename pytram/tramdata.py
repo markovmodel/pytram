@@ -97,7 +97,7 @@ class TRAMData( object ):
     def N_K( self ):
         if None == self._N_K:
             self._N_K = self.N_K_i.sum( axis=1 )
-        return self._N_K
+        return self._N_K.astype(np.intc)
 
     ############################################################################
     #
