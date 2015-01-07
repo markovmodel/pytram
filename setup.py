@@ -9,11 +9,18 @@ ext_dtram = Extension(
         include_dirs=[np.get_include()],
         extra_compile_args=["-O3"]
     )
+ext_xtram = Extension(
+        "pytram.xtram.ext",
+        sources=["ext/xtram/xtram.pyx", "ext/xtram/_xtram.c" ],
+        include_dirs=[np.get_include()],
+        extra_compile_args=["-O3"]
+    )
 
 setup(
     cmdclass={'build_ext': build_ext},
     ext_modules=[
-            ext_dtram
+            ext_dtram,
+            ext_xtram
         ],
     name='pytram',
     version='0.1.3',
@@ -39,7 +46,8 @@ setup(
             'free energy',
             'Markov state model',
             'TRAM',
-            'dTRAM'
+            'dTRAM',
+            'xTRAM'
         ],
     url='https://github.com/markovmodel/pytram',
     author='The pytram team',
@@ -54,7 +62,8 @@ setup(
     install_requires=[ 'numpy>=1.7.1' ],
     packages=[
             'pytram',
-            'pytram.dtram'
+            'pytram.dtram',
+            'pytram.xtram'
         ],
     test_suite='nose.collector',
     scripts=[
