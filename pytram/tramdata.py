@@ -55,7 +55,7 @@ class TRAMData( object ):
 
     @property
     def n_markov_states( self ):
-        if None == self._n_markov_states:
+        if self._n_markov_states is None:
             self._n_markov_states = 0
             for traj in self.trajs:
                 max_state = np.max( traj['m'] )
@@ -66,7 +66,7 @@ class TRAMData( object ):
 
     @property
     def n_therm_states( self ):
-        if None == self._n_therm_states:
+        if self._n_therm_states is None:
             self._n_therm_states = 0
             for traj in self.trajs:
                 max_state = np.max( traj['t'] )
@@ -83,7 +83,7 @@ class TRAMData( object ):
 
     @property
     def N_K_i( self ):
-        if None == self._N_K_i:
+        if self._N_K_i is None:
             self._N_K_i = np.zeros( shape=(self.n_therm_states,self.n_markov_states), dtype=np.intc )
             for traj in self.trajs:
                 for K in xrange( self.n_therm_states ):
@@ -95,7 +95,7 @@ class TRAMData( object ):
 
     @property
     def N_K( self ):
-        if None == self._N_K:
+        if self._N_K is None:
             self._N_K = self.N_K_i.sum( axis=1 )
         return self._N_K.astype(np.intc)
 
@@ -107,7 +107,7 @@ class TRAMData( object ):
 
     @property
     def M_x( self ):
-        if None == self._M_x:
+        if self._M_x is None:
             self._M_x = np.zeros( shape=(self.N_K.sum(),), dtype=np.intc )
             a = 0
             for traj in self.trajs:
@@ -118,7 +118,7 @@ class TRAMData( object ):
 
     @property
     def T_x( self ):
-        if None == self._T_x:
+        if self._T_x is None:
             self._T_x = np.zeros( shape=(self.N_K.sum(),), dtype=np.intc )
             a = 0
             for traj in self.trajs:
@@ -158,7 +158,7 @@ class TRAMData( object ):
 
     @property
     def u_I_x( self ):
-        if None == self._u_I_x:
+        if self._u_I_x is None:
             if ( None != self.kT_target ) and ( None != self.kT_K ):
                 self.gen_u_I_x_from_kT_K()
             else:
