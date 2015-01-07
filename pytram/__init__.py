@@ -13,5 +13,9 @@ from .tramdata import TRAMData
 # raise the dTRAM estimator class onto the pytram package level
 from .dtram import DTRAM
 
+# raise the xTRAM estimator class onto the pytram package level
+from .xtram import XTRAM
+
 # raise the API function onto the pytram level
-from .api import dtram, dtram_me
+from .api import dtram, dtram_me, xtram, xtram_me
+
