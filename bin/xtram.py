@@ -2,7 +2,7 @@
 
 ####################################################################################################
 #                                                                                                  #
-#   RUN SCRIPT FOR THE DTRAM METHOD WITHIN THE PYTRAM package                                      #
+#   RUN SCRIPT FOR THE XTRAM METHOD WITHIN THE PYTRAM package                                      #
 #                                                                                                  #
 #    author: Christoph Wehmeyer <christoph.wehmeyer@fu-berlin.de>                                  #
 #    author: Antonia Mey <antonia.mey@fu-berlin.de>                                                #
@@ -185,7 +185,7 @@ if '__main__' == __name__:
         print " %25d %25.12e" % ( i, f_i[i] )
     print "#\n### THERMODYNAMIC FREE ENERGY\n#"
     print "# %25s %25s" % ( "[thermodynamic state]", "[reduced free energy]" )
-    for i in xrange( dtram_obj.f_K.shape[0] ):
+    for i in xrange( xtram_obj.f_K.shape[0] ):
         print " %25d %25.12e" % ( i, xtram_obj.f_K[i] )
 
 
@@ -195,8 +195,8 @@ if '__main__' == __name__:
     #   say good bye
     #
     ############################################################################
-    print "#\n######################That's it, time to put the kettle on #####################################\n#"
-    print "#\n#                     Thank you for using xtram in the pytram package!\n#\n#"
+    print "#\n###################That's it, now it is time to put the kettle on ##############################\n#"
+    print "#\n#                  Thank you for using xtram in the pytram package!\n#\n#"
     print "#\n################################################################################################\n\n"
 
 
