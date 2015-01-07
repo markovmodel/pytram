@@ -137,9 +137,9 @@ if '__main__' == __name__:
             skiprows=args.skiprows,
             verbose=True
         )
-    tramdata = TRAMData( reader.trajs, kT_K=reader.kT_K, kT_target = reader.kT_target)
+    tramdata = TRAMData( reader.trajs, kT_K=reader.kT_K, kT_target = args.kT_target)
     try:
-        xtram_obj = XTRAM( tramdata.get_C_K_ij( args.lag ), tramdata.get_u_I_x(), tramdata.get_T_x(), tramdata.get_M_x(), tramdata.get_N_K_i(), tramdata.get_N_K(), target = tramdata.kT_target, verbose = args.verbose )
+        xtram_obj = XTRAM( tramdata.get_C_K_ij( args.lag ), tramdata.u_I_x, tramdata.T_x, tramdata.M_x, tramdata.N_K_i, tramdata.N_K, target = tramdata.kT_target, verbose = args.verbose )
     except ExpressionError, e:
         print "#\n### ERROR\n#"
         print "# Your input was faulty!"
