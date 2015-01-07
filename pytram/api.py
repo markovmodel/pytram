@@ -186,4 +186,4 @@ def xtram( tramdata, lag, sliding_window=True, maxiter=100, ftol=1.0E-5, verbose
     dtram_obj : object
         xTRAM estimator object with optimised unbiased stationary probabilities
     """
-    return xtram_me( tramdata.c_K_ij, tramdata.u_I_x, tramdata.T_x, tramdata.M_x, tramdata.N_K_i, tramdata.N_K, maxiter=maxiter, ftol=ftol, verbose=verbose )
+    return xtram_me( tramdata.get_C_K_ij( lag ), tramdata.u_I_x, tramdata.T_x, tramdata.M_x, tramdata.N_K_i, tramdata.N_K, maxiter=maxiter, ftol=ftol, verbose=verbose )
