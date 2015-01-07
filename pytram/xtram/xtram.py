@@ -66,6 +66,7 @@ class XTRAM( Estimator ):
         self._ftol = 10e-15
         self._maxiter = 1000000
         self.target = target
+        self.pi_i = None
         
         
     def sc_iteration( self , ftol=10e-4, maxiter = 10, verbose = False):
@@ -96,19 +97,20 @@ class XTRAM( Estimator ):
             C_i, C_j, C_ij, C_ji = self._compute_individual_N()
             x_row, c_column = self._initialise_X_and_N( N_tilde )
             ferr = iterate_x( N_tilde.shape[0],x_row.shape[0] , self._maxiter, self._ftol,C_i,C_j, C_ij, C_ji, x_row, c_column, x_row/x_row.sum() )
-            print 'ferr'+str( ferr )
+            #print 'ferr'+str( ferr )
             pi_curr =x_row/np.sum( x_row )
             self._update_pi_K_i( pi_curr )
             self._update_free_energies()
             finc = np.sum(np.abs( f_old-self.f_K) )
+            #now we need to compute the results
+            self.pi_i = self.pi_K_i[self.target]/self.pi_K_i[self.target].sum()
             if verbose:
                 print "  %8d %16.8e" % ( i+1, finc )
             if finc < ftol:
                     break
         if finc > ftol:
                 raise NotConvergedWarning( "XTRAM", finc )
-        #now we need to compute the results
-        self.pi_i = self.pi_K_i[target]/self.pi_K_i[target].sum()
+        
         
 
     def _initialise_X_and_N( self, N_tilde ):
