@@ -67,6 +67,7 @@ setup(
         ],
     test_suite='nose.collector',
     scripts=[
-            'bin/dtram.py'
+            'bin/dtram.py',
+            'bin/xtram.py'
         ]
 )
