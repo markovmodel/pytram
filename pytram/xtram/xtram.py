@@ -260,10 +260,8 @@ class XTRAM( Estimator ):
     def _compute_f_K( self ):
         _f_K = np.ones(self.n_therm_states)
         bar_ratio = self._bar_ratio()
-        print bar_ratio
         for I in xrange (1,self.n_therm_states):
             _f_K[I] = _f_K[I-1] - np.log(bar_ratio[I-1])
-        print _f_K
         return _f_K
         
     ####################################################################
