@@ -333,7 +333,7 @@ class XTRAM( Estimator ):
         citation_string = (
             "If you use this method for your data analysis please do not forget to cite:\n"
             "xTRAM: Estimating Equilibrium Expectations from Time-Correlated Simulation\n" 
-            "Data at Multiple Thermodyncamic States \n"
+            "Data at Multiple Thermodynamic States \n"
             "Antonia S. J. S. Mey, Hao Wu and Frank Noe, \n"
             "Phys. Rev. X 4, 041018")
         
