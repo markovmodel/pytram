@@ -11,7 +11,7 @@ User guide
 Getting started
 ===============
 
-The pytram package comes with two examples for dTRAM and xTRAM in the form of ipython notebooks. In order to run run them, got the root directory of the pytram repositroy and type
+The pytram package comes with two examples for dTRAM and xTRAM in the form of ipython notebooks. In order to run run them, go the root directory of the pytram repositroy and type
 
 .. code-block:: bash
 
@@ -25,10 +25,10 @@ in your shell for dTRAM or
 
 for xTRAM, respectively. These examples will illustrate the basic usage of the API functions and the necessary data preparation.
 
-Another way is a file based approach which allows you to store simulation results for later analysis. To this aim, we have specified the required file format in the next section and implemented a reader function to import such data into pytram. Using file-based input data allows you to run pytram
+Another way is a file-based approach which allows you to store simulation results for later analysis. To this aim, we have specified the required file format in the next section and implemented a reader function to import such data into pytram. Using file-based input data allows you to run pytram
 
   * from the API using a ``Reader`` and the ``TRAMData`` converter or
-  * using runscripts directly from the shell.
+  * using run scripts directly from the shell.
 
 The latter option requires the least effort, however, also offers only limited flexibility.
 
@@ -36,7 +36,7 @@ The latter option requires the least effort, however, also offers only limited f
 File format
 ===========
 
-The standard file format assumes the following layout. ::
+The standard file format assumes text files with the following layout. ::
 
    # This is a comment line, you can several of those.
    # The next lines indicates the meaning of the columns,
@@ -52,18 +52,18 @@ The standard file format assumes the following layout. ::
       .    .      .      .
       .    .      .      .
 
-The minimal layout only requires the ``[M]`` and ``[T]`` columns and can only be used for dTRAM. These two columns contain the sequences of the Markov and gerenating thermodynamic states. For example, the entry ``3  0`` denotes that the actual sample corresponds to the Markov state ``3`` and was generated at thermodynamic state ``0``.
+The minimal layout only requires the ``[M]`` and ``[T]`` columns and can only be used for dTRAM. These two columns contain the sequences of the Markov and generating thermodynamic states. For example, the entry ``3  0`` denotes that the actual sample corresponds to the Markov state ``3`` and was generated at thermodynamic state ``0``.
 
 **Important note**: in order to run dTRAM successfully, you need an additional ``b_K_i`` file as explained in the dTRAM section.
 
-The other TRAM estimators also require at least one energy column. For this, we distinguish two different cases:
-temperature as the only thermodynamic variable and all other thermodynamic conditions, i.e., different Hamiltonians, umbrella potentials, ...
+The other TRAM estimators require at least one energy column. For this, we distinguish two different cases:
+temperature as the only thermodynamic variable, and all other thermodynamic conditions, i.e., different Hamiltonians, umbrella potentials, ...
 
 
 Temperature as only thermodynamic variable
 ------------------------------------------
 
-In this case, you need the ``[M]`` and ``[T]`` columns and one energy column ``[u_K]``; this column contains the reduced energy sequence. The energy is reduced according to the generating thermodynamic state. For example, the entry ``2  5  20.5`` denotes the the actual sample corresponds to the Markov state ``2``, was generated at temperature ``kT_5``, and the corresponding energy was reduced with ``kT_5``.
+In this case, you need the ``[M]`` and ``[T]`` columns, and one energy column ``[u_K]``; this column contains the reduced energy sequence. The energy is reduced according to the generating thermodynamic state. For example, the entry ``2  5  20.5`` denotes that the actual sample corresponds to the Markov state ``2``, was generated at temperature ``kT_5``, and the corresponding energy was reduced with ``kT_5``.
 
 **Important note**: for temperature-dependent simulations, you need an additional single column ``kT`` file wich indicates all generating temperatures times the Boltzmann constant (consistent with your energy units). Note that the order of ``kT`` values must be constistent with the numbering of the thermodynamic states.
 
@@ -131,7 +131,7 @@ Using the API, we can run dTRAM via the following code:
    # show thermodynamic free energies
    print dtram_obj.f_K
 
-Optionally, we can use the dTRAM run script from shell. Type
+Optionally, we can use the dTRAM run script from shell. Simply type
 
 .. code-block:: bash
 
