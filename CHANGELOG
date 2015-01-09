@@ -27,4 +27,8 @@ Version 0.1.4 (Alpha):
     Added xTRAM estimator, API, runscript, tests
 	Added documentation.
 	Minor bug fixes.
+	
+Version 0.1.5 (Alpha):
+
+    Preparation for pypi
 
