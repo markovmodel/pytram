@@ -389,7 +389,7 @@ class XTRAM( Estimator ):
             raise ExpressionError( "M_x", "invalid number of dimensions (%d)" % M_x.ndim )
         if M_x.shape[0] != self.u_I_x.shape[1]:
             raise ExpressionError( "M_x", "unmatching number thermodynamic samples (%d,%d)" % (M_x.shape[0], self.u_I_x.shape[1]) )
-        if np.int32 != M_x.dtype:
+        if np.intc != M_x.dtype:
             raise ExpressionError( "M_x", "invalid dtype (%s)" % str( M_x.dtype ) )
         return True
         
@@ -414,7 +414,7 @@ class XTRAM( Estimator ):
             raise ExpressionError( "T_x", "invalid number of dimensions (%d)" % T_x.ndim )
         if T_x.shape[0] != self.u_I_x.shape[1]:
             raise ExpressionError( "T_x", "unmatching number thermodynamic samples (%d,%d)" % ( T_x.shape[0], self.u_I_x.shape[1] ) )
-        if np.int32 != T_x.dtype:
+        if np.intc != T_x.dtype:
             raise ExpressionError( "T_x", "invalid dtype (%s)" % str( T_x.dtype ) )
         return True
         
