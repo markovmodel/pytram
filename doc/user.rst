@@ -87,7 +87,18 @@ Running dTRAM
 from files
 ----------
 
+Assume that we have two files ``file_1.dat`` and ``file_2.dat`` with simulation data. In addition to that, the dTRAM method requires the user to specify the reduced bias energies of all Markov states in each of the thermodynamic states. The corresponding file format is given by ::
 
+   # we store the reduced bias energies b_K(x)/kT
+   # at the discrete states x_i
+   # [b_0]  [b_1]  ... 
+      0.0    4.0
+      0.0    0.0
+      0.0    8.0
+
+In this example, we have three Markov states which are evaluated at two different thermodynamic states.
+
+Using the API, we can run dTRAM via the following code:
 
 .. code-block:: python
 
@@ -119,6 +130,22 @@ from files
 
    # show thermodynamic free energies
    print dtram_obj.f_K
+
+Optionally, we can use the dTRAM run script from shell. Type
+
+.. code-block:: bash
+
+   dtram.py --b_K_i_file=path/to/b_K_i_file.dat --verbose path/to/file_1.dat path/to/file_2.dat
+
+and enjoy the show. Note that the run script will not work if the pytram package has not been properly installed!
+
+You can run
+
+.. code-block:: bash
+
+   dtram.py --help
+
+for additional information on available parameters.
 
 
 from seqential data
