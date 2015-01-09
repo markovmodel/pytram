@@ -1,0 +1,4 @@
+include README.rst
+include CHANGELOG
+include ext/dtram/_dtram.h
+include ext/xtram/_xtram.h
