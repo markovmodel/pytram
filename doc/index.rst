@@ -14,6 +14,6 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   api
    install
    user
+   api
