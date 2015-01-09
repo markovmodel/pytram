@@ -64,7 +64,7 @@ class XTRAM( Estimator ):
         self.f_K = self._compute_f_K()
         self.pi_K_i = self._compute_pi_K_i()
         self._ftol = 10e-15
-        self._maxiter = 1000000
+        self._maxiter = 100000
         self.target = target
         self.pi_i = None
         
