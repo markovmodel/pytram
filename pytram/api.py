@@ -71,7 +71,7 @@ def dtram_me( C_K_ij, b_K_i, maxiter=100, ftol=1.0E-5, verbose=False ):
 #
 ####################################################################################################
 
-def dtram( tramdata, lag, sliding_window=True, maxiter=100, ftol=1.0E-5, verbose=False ):
+def dtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, verbose=False ):
     r"""
     The dTRAM API function
     
@@ -112,18 +112,18 @@ def xtram_me( C_K_ij, u_I_x, T_x, M_x, N_K_i, N_K, maxiter=100, ftol=1.0E-5, ver
     ----------
     C_K_ij : numpy.ndarray( shape=(T,M,M), dtype=numpy.intc )
         transition counts between the M discrete Markov states for each of the T thermodynamic ensembles
-    u_I_x : numpy.ndarray( shape=(T,L), dtype=numpy.intc )
-        biased energy trajectory starting in thermodynamic state I
-    T_x : numpy.ndarray( )
-        thermodynamic state trajectory
-    M_x : numpy.ndarray( )
-        Markov state trajectory
-    N_K_i : numpy.ndarray( )
-        number of times a markov state is seen in a thermodynamic state
-    N_K : numpy.ndarray( )
-        number of times the trajectory is in a given thermodynamic state
+    u_I_x : numpy.ndarray( shape=(T,L), dtype=numpy.float64 )
+        biased energy evaluated at thermodynamic stated T over all sampled data of length L
+    T_x : numpy.ndarray( shape=(L), dtype=numpy.intc )
+        thermodynamic states over all sampled data of length L
+    M_x : numpy.ndarray( shape=(L), dytpe=numpy.intc )
+        Markov states over all sampled data of length L
+    N_K_i : numpy.ndarray( shape=(T,M), dtype=numpy.intc )
+        number of times a markov state (M) is seen in a thermodynamic state (T)
+    N_K : numpy.ndarray( shape=(T), dtype=numpy.intc )
+        number of observed samples for each thermodynamic state T
     maxiter : int
-        maximum number of SCF iteration steps during the optimisation of the stationary probabilities
+        maximum number of self consistent iteration steps during the optimisation of the stationary probabilities
     ftol : float (> 0.0)
         convergence criterion based on the max relative change in an self-consistent-iteration step
     verbose : boolean
@@ -162,7 +162,7 @@ def xtram_me( C_K_ij, u_I_x, T_x, M_x, N_K_i, N_K, maxiter=100, ftol=1.0E-5, ver
 #
 ####################################################################################################
 
-def xtram( tramdata, lag, sliding_window=True, maxiter=100, ftol=1.0E-5, verbose=False ):
+def xtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, verbose=False ):
     r"""
     The xTRAM API function
     
@@ -183,7 +183,7 @@ def xtram( tramdata, lag, sliding_window=True, maxiter=100, ftol=1.0E-5, verbose
     
     Returns
     -------
-    dtram_obj : object
+    xtram_obj : object
         xTRAM estimator object with optimised unbiased stationary probabilities
     """
     return xtram_me( tramdata.get_C_K_ij( lag ), tramdata.u_I_x, tramdata.T_x, tramdata.M_x, tramdata.N_K_i, tramdata.N_K, maxiter=maxiter, ftol=ftol, verbose=verbose )
