@@ -22,7 +22,7 @@ class TRAMData( object ):
     I convert/process the trajectory list of dictionaries into data types that are useful
     
     """
-    def __init__( self, trajs, b_K_i=None, kT_K=None, kT_target=None ):
+    def __init__( self, trajs, b_K_i=None, kT_K=None, kT_target=None, verbose=False ):
         r"""
         Parameters
         ----------
@@ -46,6 +46,7 @@ class TRAMData( object ):
         self.b_K_i = b_K_i
         self.kT_K = kT_K
         self.kT_target = kT_target
+        self.verbose=verbose
 
     ############################################################################
     #
@@ -56,23 +57,31 @@ class TRAMData( object ):
     @property
     def n_markov_states( self ):
         if self._n_markov_states is None:
+            if self.verbose:
+                print "# Counting Markov states"
             self._n_markov_states = 0
             for traj in self.trajs:
                 max_state = np.max( traj['m'] )
                 if max_state > self._n_markov_states:
                     self._n_markov_states = max_state
             self._n_markov_states += 1
+            if self.verbose:
+                print "# ... found %d Markov states" % self._n_markov_states
         return self._n_markov_states
 
     @property
     def n_therm_states( self ):
         if self._n_therm_states is None:
+            if self.verbose:
+                print "# Counting thermodynamic states"
             self._n_therm_states = 0
             for traj in self.trajs:
                 max_state = np.max( traj['t'] )
                 if max_state > self._n_therm_states:
                     self._n_therm_states = max_state
             self._n_therm_states += 1
+            if self.verbose:
+                print "# ... found %d thermodynamic states" % self._n_therm_states
         return self._n_therm_states
 
     ############################################################################
@@ -84,6 +93,8 @@ class TRAMData( object ):
     @property
     def N_K_i( self ):
         if self._N_K_i is None:
+            if self.verbose:
+                print "# Counting visited Markov states"
             self._N_K_i = np.zeros( shape=(self.n_therm_states,self.n_markov_states), dtype=np.intc )
             for traj in self.trajs:
                 for K in xrange( self.n_therm_states ):
@@ -91,6 +102,8 @@ class TRAMData( object ):
                     for i in xrange( self.n_markov_states ):
                         inc_i = ( traj['m'][inc_K] == i )
                         self._N_K_i[K,i] += inc_i.sum()
+            if self.verbose:
+                print "# ... done"
         return self._N_K_i
 
     @property
@@ -108,23 +121,31 @@ class TRAMData( object ):
     @property
     def M_x( self ):
         if self._M_x is None:
+            if self.verbose:
+                print "# Copying Markov state sequences"
             self._M_x = np.zeros( shape=(self.N_K.sum(),), dtype=np.intc )
             a = 0
             for traj in self.trajs:
                 b = a + traj['m'].shape[0]
                 self._M_x[a:b] = traj['m'][:]
                 a = b
+            if self.verbose:
+                print "# ... done"
         return self._M_x
 
     @property
     def T_x( self ):
         if self._T_x is None:
+            if self.verbose:
+                print "# Copying thermodynamic state sequences"
             self._T_x = np.zeros( shape=(self.N_K.sum(),), dtype=np.intc )
             a = 0
             for traj in self.trajs:
                 b = a + traj['t'].shape[0]
                 self._T_x[a:b] = traj['t'][:]
                 a = b
+            if self.verbose:
+                print "# ... done"
         return self._T_x
 
     ############################################################################
@@ -159,10 +180,14 @@ class TRAMData( object ):
     @property
     def u_I_x( self ):
         if self._u_I_x is None:
+            if self.verbose:
+                print "# Copying bias energy sequences"
             if ( None != self.kT_target ) and ( None != self.kT_K ):
                 self.gen_u_I_x_from_kT_K()
             else:
                 self.gen_u_I_x()
+            if self.verbose:
+                print "# ... done"
         return self._u_I_x
 
     def gen_u_I_x( self ):
