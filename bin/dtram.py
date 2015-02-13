@@ -97,7 +97,7 @@ if '__main__' == __name__:
     #   check mandatory command line arguments
     #
     ############################################################################
-    if None == args.b_K_i_file:
+    if args.b_K_i_file is None:
         print "ERROR: you must set the --b_K_i_file option!"
         exit( 1 )
     if 1 > len( args.files ):
