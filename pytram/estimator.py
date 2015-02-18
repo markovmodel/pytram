@@ -34,7 +34,7 @@ class Estimator( object ):
     ############################################################################
 
     def _check_C_K_ij( self, C_K_ij ):
-        if None == C_K_ij:
+        if C_K_ij is None:
             raise ExpressionError( "C_K_ij", "is None" )
         if not isinstance( C_K_ij, (np.ndarray,) ):
             raise ExpressionError( "C_K_ij", "invalid type (%s)" % str( type( C_K_ij ) ) )
