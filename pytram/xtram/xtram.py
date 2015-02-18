@@ -417,7 +417,7 @@ class XTRAM( Estimator ):
     def N_K_i( self, N_K_i ):
         self._N_K_i = None
         if self._check_N_K_i( N_K_i ):
-            self._N_K_i = N_K_i
+            self._N_K_i = N_K_i.astype(np.intc)
     
     def _check_N_K_i( self, N_K_i ):
         if N_K_i is None:
@@ -440,7 +440,7 @@ class XTRAM( Estimator ):
     def N_K( self, N_K ):
         self._N_K = None
         if self._check_N_K( N_K ):
-            self._N_K = N_K
+            self._N_K = N_K.astype(np.intc)
     
     def _check_N_K( self, N_K ):
         if N_K is None:
