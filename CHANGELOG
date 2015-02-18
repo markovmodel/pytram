@@ -21,14 +21,17 @@ Version 0.1.3 (Alpha):
 
     Added the Reader class for easy input data import. Added run script for dTRAM.
     Added u_I_x generators. in TRAMData for use with xTRAM.
-	
+    
 Version 0.1.4 (Alpha):
 
     Added xTRAM estimator, API, runscript, tests
-	Added documentation.
-	Minor bug fixes.
-	
+    Added documentation.
+    Minor bug fixes.
+    
 Version 0.1.5 (Alpha):
 
     Preparation for pypi
 
+Version 0.1.6 (Beta)
+
+    Added verbosity to TRAMData. Binning bugfix in xTRAM. Fixed None comparisons in dTRAM.
