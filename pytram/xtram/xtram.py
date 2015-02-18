@@ -26,7 +26,7 @@ class XTRAM( Estimator ):
     r"""
     I am the xTRAM estimator
     """
-    def __init__( self, C_K_ij, u_I_x, T_x, M_x, N_K_i, N_K, target = 0, verbose = False ):
+    def __init__( self, C_K_ij, u_I_x, T_x, M_x, N_K_i, target = 0 ):
 
         r"""
         Initialize the XTRAM object
@@ -43,13 +43,9 @@ class XTRAM( Estimator ):
             Markov state trajectories
         N_K_i : 2-D numpy array
             Number of markov samples in each thermodynamic state
-        N_K : 1-D numpy array
-            Numer of thermodynamic samples array
         target : Integer 
             target state for which pi_i should be computed
             default : 0
-        verbose : Boolean
-            Be loud and noisy
         """
         super( XTRAM, self ).__init__( C_K_ij )
         self._citation()
@@ -59,7 +55,7 @@ class XTRAM( Estimator ):
         self.T_x = T_x
         self.M_x = M_x
         self.N_K_i = N_K_i       
-        self.N_K = N_K
+        self.N_K = np.sum(N_K_i, axis=1)
         self.w_K = self._compute_w_K()
         self.f_K = self._compute_f_K()
         self.pi_K_i = self._compute_pi_K_i()
