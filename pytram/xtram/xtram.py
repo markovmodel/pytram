@@ -48,8 +48,7 @@ class XTRAM( Estimator ):
             default : 0
         """
         super( XTRAM, self ).__init__( C_K_ij )
-        self._citation()
-        self.verbose = verbose
+        #self._citation()
         
         self.u_I_x = u_I_x
         self.T_x = T_x
@@ -372,8 +371,6 @@ class XTRAM( Estimator ):
     def M_x( self, M_x ):
         self._M_x = None
         if self._check_M_x( M_x ):
-            if self.verbose:
-                print "M_x check pass"
             self._M_x = M_x
 
     def _check_M_x( self, M_x ):
@@ -397,8 +394,6 @@ class XTRAM( Estimator ):
     def T_x( self, T_x ):
         self._T_x = None
         if self._check_T_x( T_x ):
-            if self.verbose:
-                print "T_x check pass"
             self._T_x = T_x
 
     def _check_T_x( self, T_x ):
