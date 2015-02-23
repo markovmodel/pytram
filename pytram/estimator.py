@@ -24,8 +24,8 @@ class Estimator( object ):
     """
     def __init__( self, C_K_ij ):
         self.C_K_ij = C_K_ij
-        self.n_therm_states = C_K_ij.shape[0]
-        self.n_markov_states = C_K_ij.shape[1]
+        self._n_therm_states = C_K_ij.shape[0]
+        self._n_markov_states = C_K_ij.shape[1]
 
     ############################################################################
     #
@@ -68,6 +68,40 @@ class Estimator( object ):
     def estimate_log_L_TRAM( self, C_K_ij, p_K_ij ):
         nonzero = C_K_ij.nonzero()
         return np.sum( C_K_ij[nonzero] * np.log( p_K_ij[nonzero] ) )
+
+    ############################################################################
+    #
+    #   getters for stationary properties
+    #
+    ############################################################################
+
+    @property
+    def n_therm_states( self ):
+        return self._n_therm_states
+
+    @property
+    def n_markov_states( self ):
+        return self._n_markov_states
+
+    @property
+    def pi_i( self ):
+        raise NotImplementedError( "Override in derived class!" )
+
+    @property
+    def pi_K_i( self ):
+        raise NotImplementedError( "Override in derived class!" )
+
+    @property
+    def f_K( self ):
+        raise NotImplementedError( "Override in derived class!" )
+
+    @property
+    def f_K_i( self ):
+        return -np.log( self.pi_K_i )
+
+    @property
+    def f_i( self ):
+        return -np.log( self.pi_i )
 
 
 
