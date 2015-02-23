@@ -23,13 +23,16 @@ class Estimator( object ):
     I am the parent class for all estimators!
     """
     def __init__( self, C_K_ij ):
-        self.C_K_ij = C_K_ij
+        # this check raises an exception if C_K_ij is not usable
+        if self._check_C_K_ij( C_K_ij ):
+            self._C_K_ij = C_K_ij
+        # if we reach this point, C_K_ij is save
         self._n_therm_states = C_K_ij.shape[0]
         self._n_markov_states = C_K_ij.shape[1]
 
     ############################################################################
     #
-    #   C_K_ij sanity checks and getter/setter
+    #   C_K_ij sanity checks and getter
     #
     ############################################################################
 
@@ -52,12 +55,6 @@ class Estimator( object ):
     @property
     def C_K_ij( self ):
         return self._C_K_ij
-
-    @C_K_ij.setter
-    def C_K_ij( self, C_K_ij ):
-        self._C_K_ij = None
-        if self._check_C_K_ij( C_K_ij ):
-            self._C_K_ij = C_K_ij
 
     ############################################################################
     #
