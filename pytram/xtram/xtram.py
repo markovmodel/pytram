@@ -26,7 +26,7 @@ class XTRAM( Estimator ):
     r"""
     I am the xTRAM estimator
     """
-    def __init__( self, C_K_ij, u_I_x, T_x, M_x, N_K_i, target = 0 ):
+    def __init__( self, C_K_ij, u_I_x, T_x, M_x, N_K_i, target=0 ):
         r"""
         Initialize the XTRAM object
         
@@ -56,16 +56,39 @@ class XTRAM( Estimator ):
             self._T_x = T_x
         if self._check_N_K_i( N_K_i ):
             self._N_K_i = N_K_i.astype( np.intc )
-        self._N_K = np.sum( N_K_i, axis=1 )
+        self._N_K = np.sum( N_K_i, axis=1 ).astype( np.intc )
         self.w_K = self._compute_w_K()
-        self.f_K = self._compute_f_K()
-        self.pi_K_i = self._compute_pi_K_i()
+        self._f_K = self._compute_f_K()
+        self._pi_K_i = self._compute_pi_K_i()
         self._ftol = 10e-15
         self._maxiter = 100000
         self.target = target
-        self.pi_i = None
-        
-        
+        self._pi_i = None
+
+    ############################################################################
+    #
+    #   override getters for stationary properties
+    #
+    ############################################################################
+
+    @property
+    def pi_i( self ):
+        return self._pi_i
+
+    @property
+    def pi_K_i( self ):
+        return self._pi_K_i
+
+    @property
+    def f_K( self ):
+        return self._f_K
+
+    ############################################################################
+    #
+    #   self-consistent-iteration
+    #
+    ############################################################################
+ 
     def sc_iteration( self , ftol=10e-4, maxiter = 10, verbose = False):
         r"""Main iteration method
         Parameters
@@ -79,11 +102,10 @@ class XTRAM( Estimator ):
             verbose : boolean
                 Be loud and noisy
                 Default = False
-        
         """
         finc = 0.0
-        f_old = np.zeros(self.f_K.shape[0])
-        self.b_i_IJ = np.zeros(shape=(self.n_markov_states, self.n_therm_states, self.n_therm_states))
+        f_old = np.zeros( self.f_K.shape[0] )
+        self.b_i_IJ = np.zeros( shape=(self.n_markov_states, self.n_therm_states, self.n_therm_states) )
        
         if verbose:
             print "# %8s %16s" % ( "[Step]", "[rel. Increment]" )
@@ -93,14 +115,14 @@ class XTRAM( Estimator ):
             N_tilde = self._compute_sparse_N()
             C_i, C_j, C_ij, C_ji = self._compute_individual_N()
             x_row, c_column = self._initialise_X_and_N( N_tilde )
-            ferr = iterate_x( N_tilde.shape[0],x_row.shape[0] , self._maxiter, self._ftol,C_i,C_j, C_ij, C_ji, x_row, c_column, x_row/x_row.sum() )
+            ferr = iterate_x( N_tilde.shape[0], x_row.shape[0] , self._maxiter, self._ftol, C_i, C_j, C_ij, C_ji, x_row, c_column, x_row/x_row.sum() )
             #print 'ferr'+str( ferr )
-            pi_curr =x_row/np.sum( x_row )
+            pi_curr = x_row / np.sum( x_row )
             self._update_pi_K_i( pi_curr )
             self._update_free_energies()
-            finc = np.sum(np.abs( f_old-self.f_K) )
+            finc = np.sum( np.abs( f_old - self.f_K ) )
             #now we need to compute the results
-            self.pi_i = self.pi_K_i[self.target]/self.pi_K_i[self.target].sum()
+            self._pi_i = self.pi_K_i[self.target] / self.pi_K_i[self.target].sum()
             if verbose:
                 print "  %8d %16.8e" % ( i+1, finc )
             if finc < ftol:
