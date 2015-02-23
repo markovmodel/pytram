@@ -46,7 +46,9 @@ class TRAMData( object ):
         self.b_K_i = b_K_i
         self.kT_K = kT_K
         self.kT_target = kT_target
-        self.verbose=verbose
+        self.verbose = verbose
+        if ( kT_K is not None ) and ( kT_target is None ):
+            self.kT_target = 0
 
     ############################################################################
     #
@@ -182,7 +184,7 @@ class TRAMData( object ):
         if self._u_I_x is None:
             if self.verbose:
                 print "# Copying bias energy sequences"
-            if ( None != self.kT_target ) and ( None != self.kT_K ):
+            if not self.kT_K is None:
                 self.gen_u_I_x_from_kT_K()
             else:
                 self.gen_u_I_x()
@@ -194,6 +196,17 @@ class TRAMData( object ):
         self._u_I_x = np.zeros( shape=(self.n_therm_states,self.N_K.sum()), dtype=np.float64 )
         a = 0
         for traj in self.trajs:
+            if traj['u'].shape[1] == 1:
+                raise ExpressionError(
+                        "u_I_x",
+                        "Trajectory with single energy columns detected - use kT file and kT target"
+                    )
+            if traj['u'].shape[1] != self.n_therm_states:
+                raise ExpressionError(
+                        "u_I_x",
+                        "Trajectory with wrong number of energy columns detected (%d!=%d)" \
+                        % ( traj['u'].shape[1], self.n_therm_states )
+                    )
             b = a + traj['u'].shape[0]
             self._u_I_x[:,a:b] = traj['u'][:,:].transpose().copy()
             a = b
