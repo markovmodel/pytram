@@ -38,11 +38,37 @@ class DTRAM( Estimator ):
         super( DTRAM, self ).__init__( C_K_ij )
         self.gamma_K_i = b_K_i
         # hard-coded initial guess for pi_i and nu_K_i
-        self.pi_i = np.ones( shape=(self.n_markov_states,), dtype=np.float64 ) / float( self.n_markov_states )
-        self.nu_K_i = C_K_ij.sum( axis=2 ).astype( np.float64 )
+        self._pi_i = np.ones( shape=(self.n_markov_states,), dtype=np.float64 ) / float( self.n_markov_states )
+        self._nu_K_i = C_K_ij.sum( axis=2 ).astype( np.float64 )
         # 'private' storage variable initialization
         self._f_K = None
         self._pi_K_i = None
+
+    ############################################################################
+    #
+    #   override getters for stationary properties
+    #
+    ############################################################################
+
+    @property
+    def pi_i( self ):
+        return self._pi_i
+
+    @property
+    def pi_K_i( self ):
+        if self._pi_K_i is None:
+            self._pi_K_i = self.f_K[:,np.newaxis] * self.pi_i[np.newaxis,:] * self.gamma_K_i
+        return self._pi_K_i
+
+    @property
+    def f_K( self ):
+        if self._f_K is None:
+            self._f_K = 1.0 / np.dot( self.gamma_K_i, self.pi_i )
+        return self._f_K
+
+    @property
+    def nu_K_i( self ):
+        return self._nu_K_i
 
     ############################################################################
     #
@@ -73,12 +99,12 @@ class DTRAM( Estimator ):
         for i in xrange( maxiter ):
             # iterate nu_K_i
             tmp_nu_K_i = np.copy( self.nu_K_i )
-            nu_K_ij_equation( tmp_nu_K_i, self.gamma_K_i, self.pi_i, self.C_K_ij, self.nu_K_i )
+            nu_K_ij_equation( tmp_nu_K_i, self.gamma_K_i, self.pi_i, self.C_K_ij, self._nu_K_i )
             # iterate pi_i
             tmp_pi_i = np.copy( self.pi_i )
-            pi_i_equation( self.nu_K_i, self.gamma_K_i, tmp_pi_i, self.C_K_ij, self.pi_i )
+            pi_i_equation( self.nu_K_i, self.gamma_K_i, tmp_pi_i, self.C_K_ij, self._pi_i )
             # normalize pi_i
-            self.pi_i /= self.pi_i.sum()
+            self._pi_i /= self.pi_i.sum()
             # compute the relative change of pi_i
             nonzero = tmp_pi_i.nonzero()
             div = np.ones( shape=(self.n_markov_states,), dtype=np.float64 )
@@ -93,30 +119,6 @@ class DTRAM( Estimator ):
         # complain if we're not yet converged
         if finc > ftol:
             raise NotConvergedWarning( "DTRAM", finc )
-
-    ############################################################################
-    #
-    #   f_K getter
-    #
-    ############################################################################
-
-    @property
-    def f_K( self ):
-        if self._f_K is None:
-            self._f_K = 1.0 / np.dot( self.gamma_K_i, self.pi_i )
-        return self._f_K
-
-    ############################################################################
-    #
-    #   pi_K_i getter
-    #
-    ############################################################################
-
-    @property
-    def pi_K_i( self ):
-        if self._pi_K_i is None:
-            self._pi_K_i = self.f_K[:,np.newaxis] * self.pi_i[np.newaxis,:] * self.gamma_K_i
-        return self._pi_K_i
 
     ############################################################################
     #
