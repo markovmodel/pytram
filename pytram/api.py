@@ -104,7 +104,7 @@ def dtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, verbo
 #
 ####################################################################################################
 
-def xtram_me( C_K_ij, u_I_x, T_x, M_x, N_K_i, N_K, maxiter=100, ftol=1.0E-5, verbose=False ):
+def xtram_me( C_K_ij, u_I_x, T_x, M_x, N_K_i, maxiter=100, ftol=1.0E-5, target = 0, verbose=False ):
     r"""
     The xTRAM API function
     
@@ -120,10 +120,10 @@ def xtram_me( C_K_ij, u_I_x, T_x, M_x, N_K_i, N_K, maxiter=100, ftol=1.0E-5, ver
         Markov states over all sampled data of length L
     N_K_i : numpy.ndarray( shape=(T,M), dtype=numpy.intc )
         number of times a markov state (M) is seen in a thermodynamic state (T)
-    N_K : numpy.ndarray( shape=(T), dtype=numpy.intc )
-        number of observed samples for each thermodynamic state T
     maxiter : int
         maximum number of self consistent iteration steps during the optimisation of the stationary probabilities
+    target : int
+        integer of the thermodynamic state for which results should be estiamted
     ftol : float (> 0.0)
         convergence criterion based on the max relative change in an self-consistent-iteration step
     verbose : boolean
@@ -136,7 +136,7 @@ def xtram_me( C_K_ij, u_I_x, T_x, M_x, N_K_i, N_K, maxiter=100, ftol=1.0E-5, ver
     """
     # try to create the DTRAM object
     try:
-        xtram_obj = XTRAM( C_K_ij, u_I_x, T_x, M_x, N_K_i, N_K )
+        xtram_obj = XTRAM( C_K_ij, u_I_x, T_x, M_x, N_K_i, target )
     except ExpressionError, e:
         print "# ERROR ############################################################################"
         print "# Your input was faulty!"
@@ -162,7 +162,7 @@ def xtram_me( C_K_ij, u_I_x, T_x, M_x, N_K_i, N_K, maxiter=100, ftol=1.0E-5, ver
 #
 ####################################################################################################
 
-def xtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, verbose=False ):
+def xtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, target = 0, verbose=False ):
     r"""
     The xTRAM API function
     
@@ -178,6 +178,8 @@ def xtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, verbo
         maximum number of SCF iteration steps during the optimisation of the stationary probabilities
     ftol : float (> 0.0)
         convergence criterion based on the max relative change in an self-consistent-iteration step
+    target : int
+        integer of the thermodynamic state for which results should be estiamted
     verbose : boolean
         writes convergence information to stdout during the self-consistent-iteration cycle
     
@@ -186,4 +188,4 @@ def xtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, verbo
     xtram_obj : object
         xTRAM estimator object with optimised unbiased stationary probabilities
     """
-    return xtram_me( tramdata.get_C_K_ij( lag ), tramdata.u_I_x, tramdata.T_x, tramdata.M_x, tramdata.N_K_i, tramdata.N_K, maxiter=maxiter, ftol=ftol, verbose=verbose )
+    return xtram_me( tramdata.get_C_K_ij( lag ), tramdata.u_I_x, tramdata.T_x, tramdata.M_x, tramdata.N_K_i, maxiter=maxiter, ftol=ftol, target = target, verbose=verbose )

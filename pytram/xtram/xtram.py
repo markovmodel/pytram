@@ -26,7 +26,7 @@ class XTRAM( Estimator ):
     r"""
     I am the xTRAM estimator
     """
-    def __init__( self, C_K_ij, u_I_x, T_x, M_x, N_K_i, N_K, target = 0, verbose = False ):
+    def __init__( self, C_K_ij, u_I_x, T_x, M_x, N_K_i, target = 0 ):
 
         r"""
         Initialize the XTRAM object
@@ -43,23 +43,18 @@ class XTRAM( Estimator ):
             Markov state trajectories
         N_K_i : 2-D numpy array
             Number of markov samples in each thermodynamic state
-        N_K : 1-D numpy array
-            Numer of thermodynamic samples array
         target : Integer 
             target state for which pi_i should be computed
             default : 0
-        verbose : Boolean
-            Be loud and noisy
         """
         super( XTRAM, self ).__init__( C_K_ij )
-        self._citation()
-        self.verbose = verbose
+        #self._citation()
         
         self.u_I_x = u_I_x
         self.T_x = T_x
         self.M_x = M_x
         self.N_K_i = N_K_i       
-        self.N_K = N_K
+        self.N_K = np.sum(N_K_i, axis=1)
         self.w_K = self._compute_w_K()
         self.f_K = self._compute_f_K()
         self.pi_K_i = self._compute_pi_K_i()
@@ -376,8 +371,6 @@ class XTRAM( Estimator ):
     def M_x( self, M_x ):
         self._M_x = None
         if self._check_M_x( M_x ):
-            if self.verbose:
-                print "M_x check pass"
             self._M_x = M_x
 
     def _check_M_x( self, M_x ):
@@ -401,8 +394,6 @@ class XTRAM( Estimator ):
     def T_x( self, T_x ):
         self._T_x = None
         if self._check_T_x( T_x ):
-            if self.verbose:
-                print "T_x check pass"
             self._T_x = T_x
 
     def _check_T_x( self, T_x ):
@@ -426,7 +417,7 @@ class XTRAM( Estimator ):
     def N_K_i( self, N_K_i ):
         self._N_K_i = None
         if self._check_N_K_i( N_K_i ):
-            self._N_K_i = N_K_i
+            self._N_K_i = N_K_i.astype(np.intc)
     
     def _check_N_K_i( self, N_K_i ):
         if N_K_i is None:
@@ -449,7 +440,7 @@ class XTRAM( Estimator ):
     def N_K( self, N_K ):
         self._N_K = None
         if self._check_N_K( N_K ):
-            self._N_K = N_K
+            self._N_K = N_K.astype(np.intc)
     
     def _check_N_K( self, N_K ):
         if N_K is None:
