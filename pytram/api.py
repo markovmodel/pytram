@@ -134,7 +134,7 @@ def xtram_me( C_K_ij, u_I_x, T_x, M_x, N_K_i, maxiter=100, ftol=1.0E-5, target =
     xtram_obj : object
         xTRAM estimator object with optimised unbiased stationary probabilities
     """
-    # try to create the DTRAM object
+    # try to create the XTRAM object
     try:
         xtram_obj = XTRAM( C_K_ij, u_I_x, T_x, M_x, N_K_i, target )
     except ExpressionError, e:
@@ -188,4 +188,14 @@ def xtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, targe
     xtram_obj : object
         xTRAM estimator object with optimised unbiased stationary probabilities
     """
-    return xtram_me( tramdata.get_C_K_ij( lag ), tramdata.u_I_x, tramdata.T_x, tramdata.M_x, tramdata.N_K_i, maxiter=maxiter, ftol=ftol, target = target, verbose=verbose )
+    return xtram_me(
+            tramdata.get_C_K_ij( lag ),
+            tramdata.u_I_x,
+            tramdata.T_x,
+            tramdata.M_x,
+            tramdata.N_K_i,
+            maxiter=maxiter,
+            ftol=ftol,
+            target=target,
+            verbose=verbose
+        )
