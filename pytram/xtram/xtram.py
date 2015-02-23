@@ -27,7 +27,6 @@ class XTRAM( Estimator ):
     I am the xTRAM estimator
     """
     def __init__( self, C_K_ij, u_I_x, T_x, M_x, N_K_i, target = 0 ):
-
         r"""
         Initialize the XTRAM object
         
@@ -49,12 +48,15 @@ class XTRAM( Estimator ):
         """
         super( XTRAM, self ).__init__( C_K_ij )
         #self._citation()
-        
-        self.u_I_x = u_I_x
-        self.T_x = T_x
-        self.M_x = M_x
-        self.N_K_i = N_K_i       
-        self.N_K = np.sum(N_K_i, axis=1)
+        if self._check_u_I_x( u_I_x ):
+            self._u_I_x = u_I_x
+        if self._check_M_x( M_x ):
+            self._M_x = M_x
+        if self._check_T_x( T_x ):
+            self._T_x = T_x
+        if self._check_N_K_i( N_K_i ):
+            self._N_K_i = N_K_i.astype( np.intc )
+        self._N_K = np.sum( N_K_i, axis=1 )
         self.w_K = self._compute_w_K()
         self.f_K = self._compute_f_K()
         self.pi_K_i = self._compute_pi_K_i()
@@ -344,11 +346,11 @@ class XTRAM( Estimator ):
     def u_I_x( self ):
         return self._u_I_x
         
-    @u_I_x.setter
-    def u_I_x( self, u_I_x ):
-        self._u_I_x = None
-        if self._check_u_I_x( u_I_x ):
-            self._u_I_x = u_I_x
+    # @u_I_x.setter
+    # def u_I_x( self, u_I_x ):
+    #     self._u_I_x = None
+    #     if self._check_u_I_x( u_I_x ):
+    #         self._u_I_x = u_I_x
     
     def _check_u_I_x( self, u_I_x ):
         if u_I_x is None:
@@ -367,11 +369,11 @@ class XTRAM( Estimator ):
     def M_x( self ):
         return self._M_x
 
-    @M_x.setter
-    def M_x( self, M_x ):
-        self._M_x = None
-        if self._check_M_x( M_x ):
-            self._M_x = M_x
+    # @M_x.setter
+    # def M_x( self, M_x ):
+    #     self._M_x = None
+    #     if self._check_M_x( M_x ):
+    #         self._M_x = M_x
 
     def _check_M_x( self, M_x ):
         if M_x is None:
@@ -390,11 +392,11 @@ class XTRAM( Estimator ):
     def T_x( self ):
         return self._T_x
 
-    @T_x.setter
-    def T_x( self, T_x ):
-        self._T_x = None
-        if self._check_T_x( T_x ):
-            self._T_x = T_x
+    # @T_x.setter
+    # def T_x( self, T_x ):
+    #     self._T_x = None
+    #     if self._check_T_x( T_x ):
+    #         self._T_x = T_x
 
     def _check_T_x( self, T_x ):
         if T_x is None:
@@ -413,11 +415,11 @@ class XTRAM( Estimator ):
     def N_K_i( self ):
         return self._N_K_i
         
-    @N_K_i.setter
-    def N_K_i( self, N_K_i ):
-        self._N_K_i = None
-        if self._check_N_K_i( N_K_i ):
-            self._N_K_i = N_K_i.astype(np.intc)
+    # @N_K_i.setter
+    # def N_K_i( self, N_K_i ):
+    #     self._N_K_i = None
+    #     if self._check_N_K_i( N_K_i ):
+    #         self._N_K_i = N_K_i.astype(np.intc)
     
     def _check_N_K_i( self, N_K_i ):
         if N_K_i is None:
@@ -436,19 +438,19 @@ class XTRAM( Estimator ):
     def N_K( self ):
         return self._N_K
         
-    @N_K.setter
-    def N_K( self, N_K ):
-        self._N_K = None
-        if self._check_N_K( N_K ):
-            self._N_K = N_K.astype(np.intc)
+    # @N_K.setter
+    # def N_K( self, N_K ):
+    #     self._N_K = None
+    #     if self._check_N_K( N_K ):
+    #         self._N_K = N_K.astype(np.intc)
     
-    def _check_N_K( self, N_K ):
-        if N_K is None:
-            raise ExpressionError( "N_K", "is None" )
-        if not isinstance( N_K, (np.ndarray,) ):
-            raise ExpressionError( "N_K", "invalid type (%s)" % str( type( N_K ) ) )
-        if 1 != N_K.ndim:
-            raise ExpressionError( "N_K", "invalid number of dimensions (%d)" % N_K.ndim )
-        if N_K.shape[0] != self.n_therm_states:
-            raise ExpressionError( "N_K", "unmatching number of thermodynamic states (%d,%d)" % ( N_K.shape[0], self.n_therm_states) )
-        return True
+    # def _check_N_K( self, N_K ):
+    #     if N_K is None:
+    #         raise ExpressionError( "N_K", "is None" )
+    #     if not isinstance( N_K, (np.ndarray,) ):
+    #         raise ExpressionError( "N_K", "invalid type (%s)" % str( type( N_K ) ) )
+    #     if 1 != N_K.ndim:
+    #         raise ExpressionError( "N_K", "invalid number of dimensions (%d)" % N_K.ndim )
+    #     if N_K.shape[0] != self.n_therm_states:
+    #         raise ExpressionError( "N_K", "unmatching number of thermodynamic states (%d,%d)" % ( N_K.shape[0], self.n_therm_states) )
+    #     return True
