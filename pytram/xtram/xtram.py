@@ -88,7 +88,7 @@ class XTRAM( Estimator ):
     #   self-consistent-iteration
     #
     ############################################################################
- 
+
     def sc_iteration( self , ftol=10e-4, maxiter = 10, verbose = False):
         r"""Main iteration method
         Parameters
@@ -106,7 +106,6 @@ class XTRAM( Estimator ):
         finc = 0.0
         f_old = np.zeros( self.f_K.shape[0] )
         self.b_i_IJ = np.zeros( shape=(self.n_markov_states, self.n_therm_states, self.n_therm_states) )
-       
         if verbose:
             print "# %8s %16s" % ( "[Step]", "[rel. Increment]" )
         for i in xrange( maxiter ):
@@ -129,8 +128,6 @@ class XTRAM( Estimator ):
                     break
         if finc > ftol:
                 raise NotConvergedWarning( "XTRAM", finc )
-        
-        
 
     def _initialise_X_and_N( self, N_tilde ):
         r"""
@@ -149,7 +146,7 @@ class XTRAM( Estimator ):
                 X_row[entry[0]]+=(entry[2]+entry[3])*0.5
                 X_row[entry[1]]+=(entry[2]+entry[3])*0.5
         return (X_row, N_column)
-        
+
     def _update_pi_K_i( self, pi_curr ):
         r"""
         copies the current iteration pi_curr into the pi_K_i variable and normalises it as required
@@ -158,7 +155,7 @@ class XTRAM( Estimator ):
             initial = K*self.n_markov_states
             final =K*self.n_markov_states+self.n_markov_states
             self.pi_K_i[K][:] = pi_curr[initial:final]/np.sum(pi_curr[:])
-            
+
     def _update_free_energies( self ):
         r"""
         computes the free energies based on the current pi_K_i
@@ -166,13 +163,12 @@ class XTRAM( Estimator ):
         for K in xrange( self.f_K.shape[0] ):
             self.f_K[K] = self.f_K[K]- np.log((np.sum(self.N_K).astype(float)/self.N_K[K])*(np.sum(self.pi_K_i[K,:])))
 
-        
     ####################################################################
     #                                                                  #
     # Computes the extended count matrix                               #
     #                                                                  #
     ####################################################################
-    
+
     def _compute_individual_N( self, factor=1.0 ):
         C_i = []
         C_j = []
@@ -186,7 +182,6 @@ class XTRAM( Estimator ):
                     if i==j:
                         n_ij = (self.C_K_ij[I,i,j]*factor+self.b_i_IJ[i,I,I])
                         n_ji = (self.C_K_ij[I,i,j]*factor+self.b_i_IJ[i,I,I])
-                        
                         C_i.append(s1)
                         C_j.append(s2)
                         C_ij.append(n_ij)
@@ -212,7 +207,7 @@ class XTRAM( Estimator ):
                         C_ij.append(n_ij)
                         C_ji.append(n_ji)
         return (np.array(C_i).astype(np.intc), np.array(C_j).astype(dtype=np.intc), np.array(C_ij), np.array(C_ji))
-        
+
     def _compute_sparse_N( self , factor=1.0):
         r"""Computes a Nx4 array containing the count matrix in a sparse format
         
@@ -240,7 +235,6 @@ class XTRAM( Estimator ):
                         entry[1] = s2
                         entry[2] = n_ij
                         entry[3] = n_ji
-                        
                         N_tilde.append(entry)
                     else:
                         n_ij = self.C_K_ij[I,i,j]*factor
@@ -252,7 +246,6 @@ class XTRAM( Estimator ):
                             entry[2] = n_ij
                             entry[3] = n_ji
                             N_tilde.append(entry)
-        
         for I in xrange(self.n_therm_states):
             for J in xrange(I,self.n_therm_states):
                 for i in xrange(self.n_markov_states):
@@ -269,26 +262,25 @@ class XTRAM( Estimator ):
                         N_tilde.append(entry)
         return np.array(N_tilde)
 
-        
     ####################################################################
     #                                                                  #
     # Computes the initial guess of free energies vie bar ratios       #
     #                                                                  #
     ####################################################################
-    
+
     def _compute_f_K( self ):
         _f_K = np.ones(self.n_therm_states)
         bar_ratio = self._bar_ratio()
         for I in xrange (1,self.n_therm_states):
             _f_K[I] = _f_K[I-1] - np.log(bar_ratio[I-1])
         return _f_K
-        
+
     ####################################################################
     #                                                                  #
     # Computes BAR ratios                                              #
     #                                                                  #
     ####################################################################
-    
+
     def _bar_ratio( self ):
         bar_ratio = np.zeros(self.n_therm_states-1)
         I_plus_one = np.zeros(self.n_therm_states)
@@ -305,20 +297,19 @@ class XTRAM( Estimator ):
         for I in xrange(bar_ratio.shape[0]):
             bar_ratio[I]=(I_plus_one[I]/I_minus_one[I+1])*(self.N_K[I+1].astype('float')/self.N_K[I].astype('float'))
         return bar_ratio
-        
+
     ####################################################################
     #                                                                  #
     # metropolis function                                              #
     #                                                                  #
     ####################################################################
-        
+
     def _metropolis( self, u_1, u_2 ):
         if (u_1-u_2)>0:
             return 1.0
         else:
             return np.exp(u_1-u_2)
-            
-    
+
     ####################################################################
     #                                                                  #
     # Initialises the stationary probabilities                         #
@@ -327,10 +318,8 @@ class XTRAM( Estimator ):
     
     def _compute_pi_K_i( self ):
         _pi_K_i = np.ones(self.n_therm_states*self.n_markov_states).reshape(self.n_therm_states,self.n_markov_states)
-        
         return _pi_K_i
 
-        
     ####################################################################
     #                                                                  #
     # Computes the the weight at each thermoydnamic state              #
@@ -339,8 +328,7 @@ class XTRAM( Estimator ):
         
     def _compute_w_K( self ):
         return self.N_K.astype(float)/np.sum(self.N_K) #weight array based on thermodynamics sample counts
-        
-    
+
     ####################################################################
     #                                                                  #
     # prints the needed citation                                       #
@@ -367,13 +355,7 @@ class XTRAM( Estimator ):
     @property
     def u_I_x( self ):
         return self._u_I_x
-        
-    # @u_I_x.setter
-    # def u_I_x( self, u_I_x ):
-    #     self._u_I_x = None
-    #     if self._check_u_I_x( u_I_x ):
-    #         self._u_I_x = u_I_x
-    
+
     def _check_u_I_x( self, u_I_x ):
         if u_I_x is None:
             raise ExpressionError( "u_I_x", "is None" )
@@ -386,16 +368,10 @@ class XTRAM( Estimator ):
         if np.float64 != u_I_x.dtype:
             raise ExpressionError( "u_I_x", "invalid dtype (%s)" % str( u_I_x.dtype ) )
         return True
-    
+
     @property
     def M_x( self ):
         return self._M_x
-
-    # @M_x.setter
-    # def M_x( self, M_x ):
-    #     self._M_x = None
-    #     if self._check_M_x( M_x ):
-    #         self._M_x = M_x
 
     def _check_M_x( self, M_x ):
         if M_x is None:
@@ -409,16 +385,10 @@ class XTRAM( Estimator ):
         if np.intc != M_x.dtype:
             raise ExpressionError( "M_x", "invalid dtype (%s)" % str( M_x.dtype ) )
         return True
-        
+
     @property
     def T_x( self ):
         return self._T_x
-
-    # @T_x.setter
-    # def T_x( self, T_x ):
-    #     self._T_x = None
-    #     if self._check_T_x( T_x ):
-    #         self._T_x = T_x
 
     def _check_T_x( self, T_x ):
         if T_x is None:
@@ -432,17 +402,11 @@ class XTRAM( Estimator ):
         if np.intc != T_x.dtype:
             raise ExpressionError( "T_x", "invalid dtype (%s)" % str( T_x.dtype ) )
         return True
-        
+
     @property
     def N_K_i( self ):
         return self._N_K_i
-        
-    # @N_K_i.setter
-    # def N_K_i( self, N_K_i ):
-    #     self._N_K_i = None
-    #     if self._check_N_K_i( N_K_i ):
-    #         self._N_K_i = N_K_i.astype(np.intc)
-    
+
     def _check_N_K_i( self, N_K_i ):
         if N_K_i is None:
             raise ExpressionError( "N_K_i", "is None" )
@@ -455,24 +419,7 @@ class XTRAM( Estimator ):
         if N_K_i.shape[1] != self.n_markov_states:
             raise ExpressionError( "N_K_i", "unmatching number of Markov states (%d,%d)" % ( N_K_i.shape[1], self.n_markov_states ) )
         return True
-        
+
     @property
     def N_K( self ):
         return self._N_K
-        
-    # @N_K.setter
-    # def N_K( self, N_K ):
-    #     self._N_K = None
-    #     if self._check_N_K( N_K ):
-    #         self._N_K = N_K.astype(np.intc)
-    
-    # def _check_N_K( self, N_K ):
-    #     if N_K is None:
-    #         raise ExpressionError( "N_K", "is None" )
-    #     if not isinstance( N_K, (np.ndarray,) ):
-    #         raise ExpressionError( "N_K", "invalid type (%s)" % str( type( N_K ) ) )
-    #     if 1 != N_K.ndim:
-    #         raise ExpressionError( "N_K", "invalid number of dimensions (%d)" % N_K.ndim )
-    #     if N_K.shape[0] != self.n_therm_states:
-    #         raise ExpressionError( "N_K", "unmatching number of thermodynamic states (%d,%d)" % ( N_K.shape[0], self.n_therm_states) )
-    #     return True
