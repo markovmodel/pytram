@@ -36,7 +36,9 @@ class DTRAM( Estimator ):
             bias energies in the T thermodynamic and M discrete Markov states
         """
         super( DTRAM, self ).__init__( C_K_ij )
-        self.gamma_K_i = b_K_i
+        # this check raises an exception if b_K_i is not usable
+        if self._check_b_K_i( b_K_i ):
+            self._gamma_K_i = np.exp( b_K_i.min() - b_K_i )
         # hard-coded initial guess for pi_i and nu_K_i
         self._pi_i = np.ones( shape=(self.n_markov_states,), dtype=np.float64 ) / float( self.n_markov_states )
         self._nu_K_i = C_K_ij.sum( axis=2 ).astype( np.float64 )
@@ -157,7 +159,7 @@ class DTRAM( Estimator ):
 
     ############################################################################
     #
-    #   gamma_K_i sanity checks and getter/setter
+    #   gamma_K_i sanity checks and getter
     #
     ############################################################################
 
@@ -179,12 +181,4 @@ class DTRAM( Estimator ):
     @property
     def gamma_K_i( self ):
         return self._gamma_K_i
-
-    @gamma_K_i.setter
-    def gamma_K_i( self, b_K_i ):
-        self._gamma_K_i = None
-        if self._check_b_K_i( b_K_i ):
-            self._gamma_K_i = np.exp( b_K_i.min() - b_K_i )
-
-
 
