@@ -139,7 +139,7 @@ if '__main__' == __name__:
         )
     tramdata = TRAMData( reader.trajs, kT_K=reader.kT_K, kT_target = args.kT_target)
     try:
-        xtram_obj = XTRAM( tramdata.get_C_K_ij( args.lag ), tramdata.u_I_x, tramdata.T_x, tramdata.M_x, tramdata.N_K_i, tramdata.N_K, target = tramdata.kT_target, verbose = args.verbose )
+        xtram_obj = XTRAM( tramdata.get_C_K_ij( args.lag ), tramdata.u_I_x, tramdata.T_x, tramdata.M_x, tramdata.N_K_i, target = tramdata.kT_target )
     except ExpressionError, e:
         print "#\n### ERROR\n#"
         print "# Your input was faulty!"
@@ -180,9 +180,8 @@ if '__main__' == __name__:
         print " %25d %25.12e" % ( i, xtram_obj.pi_i[i] )
     print "#\n### UNBIASED FREE ENERGY\n#"
     print "# %25s %25s" % ( "[markov state]", "[reduced free energy]" )
-    f_i = -np.log( xtram_obj.pi_i )
-    for i in xrange( f_i.shape[0] ):
-        print " %25d %25.12e" % ( i, f_i[i] )
+    for i in xrange( xtram_obj.f_i.shape[0] ):
+        print " %25d %25.12e" % ( i, xtram_obj.f_i[i] )
     print "#\n### THERMODYNAMIC FREE ENERGY\n#"
     print "# %25s %25s" % ( "[thermodynamic state]", "[reduced free energy]" )
     for i in xrange( xtram_obj.f_K.shape[0] ):
