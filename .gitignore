@@ -8,3 +8,4 @@ pytram.egg-info
 setup.cfg
 doc/_build
 dist/
+.DS_Store
