@@ -63,7 +63,7 @@ class XTRAM( Estimator ):
         self._ftol = 10e-15
         self._maxiter = 100000
         self.target = target
-        self._pi_i = None
+
 
     ############################################################################
     #
@@ -73,7 +73,7 @@ class XTRAM( Estimator ):
 
     @property
     def pi_i( self ):
-        return self._pi_i
+        return self.pi_K_i[self.target] / self.pi_K_i[self.target].sum()
 
     @property
     def pi_K_i( self ):
@@ -107,7 +107,7 @@ class XTRAM( Estimator ):
         f_old = np.zeros( self.f_K.shape[0] )
         self.b_i_IJ = np.zeros( shape=(self.n_markov_states, self.n_therm_states, self.n_therm_states) )
         if verbose:
-            print "# %8s %16s" % ( "[Step]", "[rel. Increment]" )
+            print "# %25s %25s" % ( "[Step]", "[rel. Increment]" )
         for i in xrange( maxiter ):
             f_old[:]=self.f_K[:]
             b_i_IJ_equation( self.T_x, self.M_x, self.N_K, self.f_K, self.w_K, self.u_I_x, self.b_i_IJ )
@@ -120,10 +120,8 @@ class XTRAM( Estimator ):
             self._update_pi_K_i( pi_curr )
             self._update_free_energies()
             finc = np.sum( np.abs( f_old - self.f_K ) )
-            #now we need to compute the results
-            self._pi_i = self.pi_K_i[self.target] / self.pi_K_i[self.target].sum()
             if verbose:
-                print "  %8d %16.8e" % ( i+1, finc )
+                print " %25d %25.12e" % ( i+1, finc )
             if finc < ftol:
                     break
         if finc > ftol:
