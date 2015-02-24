@@ -35,3 +35,9 @@ Version 0.1.5 (Alpha):
 Version 0.1.6 (Beta)
 
     Added verbosity to TRAMData. Binning bugfix in xTRAM. Fixed None comparisons in dTRAM.
+
+Version 0.1.7 (Beta)
+
+    Added stationary property getters to Estimator. Removed unsafe setters from Estimator classes.
+    Added kT switch in TRAMData. Moved sanity checks to Estimator classes' constructors.
+    Standardised verbose printouts.

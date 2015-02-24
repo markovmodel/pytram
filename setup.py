@@ -23,7 +23,7 @@ setup(
             ext_xtram
         ],
     name='pytram',
-    version='0.1.6',
+    version='0.1.7',
     description='The TRAM package',
     long_description='The python interface to the TRAM framework for estimating Markov state models from biased MD simulations.',
     classifiers=[
