@@ -175,9 +175,8 @@ if '__main__' == __name__:
         print " %25d %25.12e" % ( i, dtram_obj.pi_i[i] )
     print "#\n### UNBIASED FREE ENERGY\n#"
     print "# %25s %25s" % ( "[markov state]", "[reduced free energy]" )
-    f_i = -np.log( dtram_obj.pi_i )
     for i in xrange( f_i.shape[0] ):
-        print " %25d %25.12e" % ( i, f_i[i] )
+        print " %25d %25.12e" % ( i, dtram_obj.f_i[i] )
     print "#\n### THERMODYNAMIC FREE ENERGY\n#"
     print "# %25s %25s" % ( "[thermodynamic state]", "[reduced free energy]" )
     for i in xrange( dtram_obj.f_K.shape[0] ):
