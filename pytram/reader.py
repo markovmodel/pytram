@@ -56,7 +56,7 @@ class Reader( object ):
 
     @property
     def trajs( self ):
-        if None == self._trajs:
+        if self._trajs is None:
             self._trajs= []
             for f in self.files:
                 if self.verbose:
@@ -94,8 +94,8 @@ class Reader( object ):
 
     @property
     def b_K_i( self ):
-        if None == self._b_K_i:
-            if None == self.b_K_i_file:
+        if self._b_K_i is None:
+            if self.b_K_i_file is None:
                 return None
             if self.verbose:
                 print "# Reading b_K_i_file <%s>" % self.b_K_i_file
@@ -115,8 +115,8 @@ class Reader( object ):
 
     @property
     def kT_K( self ):
-        if None == self._kT_K:
-            if None == self.kT_file:
+        if self._kT_K is None:
+            if self.kT_file is None:
                 return None
             if self.verbose:
                 print "# Reading kT_file <%s>" % self.kT_file
