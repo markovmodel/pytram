@@ -29,6 +29,11 @@ class Estimator( object ):
         # if we reach this point, C_K_ij is save
         self._n_therm_states = C_K_ij.shape[0]
         self._n_markov_states = C_K_ij.shape[1]
+        self.citation = []
+
+    def cite( self, pre="" ):
+        for line in self.citation:
+            print "%s%s" % ( pre, line )
 
     ############################################################################
     #
