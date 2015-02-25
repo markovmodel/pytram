@@ -45,6 +45,13 @@ class DTRAM( Estimator ):
         # 'private' storage variable initialization
         self._f_K = None
         self._pi_K_i = None
+        # citation information
+        self.citation = [
+                "Statistically optimal analysis of state-discretized trajectory data",
+                "from multiple thermodynamic states;",
+                "Hao Wu, Antonia S.J.S. Mey, Edina Rosta, and Frank Noe",
+                "J. Chem. Phys. 141, 214106 (2014)"
+            ]
 
     ############################################################################
     #
