@@ -11,6 +11,7 @@ dTRAM estimator module
 import numpy as np
 from ..estimator import Estimator, NotConvergedWarning, ExpressionError
 from .ext import nu_K_i_equation_tagged, pi_i_equation_tagged, p_K_ij_equation_tagged
+from .ext import log_nu_K_i_setter_lse, log_nu_K_i_equation_lse, f_i_equation_lse, p_K_ij_equation_lse
 
 
 
