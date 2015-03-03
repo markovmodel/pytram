@@ -194,9 +194,11 @@ if '__main__' == __name__:
     #   say good bye
     #
     ############################################################################
-    print "#\n###################That's it, now it is time to put the kettle on ##############################\n#"
-    print "#\n#                  Thank you for using xtram in the pytram package!\n#\n#"
-    print "#\n################################################################################################\n\n"
+    print "#\n#################################### THAT'S IT #####################################\n#"
+    print "#\n#                     Thank you for using the pytram package!\n#\n#"
+    print "### CITATION\n#"
+    xtram_obj.cite( pre="#    " )
+    print "#\n####################################################################################\n\n"
 
 
 

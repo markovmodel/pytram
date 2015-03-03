@@ -192,10 +192,7 @@ if '__main__' == __name__:
     print "#\n#################################### THAT'S IT #####################################\n#"
     print "#\n#                     Thank you for using the pytram package!\n#\n#"
     print "### CITATION\n#"
-    print "#    Statistically optimal analysis of state-discretized trajectory data"
-    print "#    from multiple thermodynamic states;"
-    print "#    Hao Wu, Antonia S.J.S. Mey, Edina Rosta, and Frank Noe"
-    print "#    J. Chem. Phys. 141, 214106 (2014)"
+    dtram_obj.cite( pre="#    " )
     print "#\n####################################################################################\n\n"
 
 
