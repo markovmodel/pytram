@@ -1,6 +1,7 @@
 *.pyc
 *.so
 build
+ext/lse/lse.c
 ext/dtram/dtram.c
 ext/xtram/xtram.c
 .ipynb_checkpoints
