@@ -49,7 +49,13 @@ class DTRAM( Estimator ):
             self._f_K = None
             self._pi_K_i = None
         else:
-            pass
+            # this check raises an exception if b_K_i is not usable
+            if self._check_b_K_i( b_K_i ):
+                self._b_K_i = b_K_i
+            # hard-coded initial guess for pi_i and nu_K_i
+            self._f_i = np.zeros( shape=(self.n_markov_states,), dtype=np.float64 )
+            self._log_nu_K_i = np.zeros( shape=(self.n_therm_states,self.n_markov_states), dtype=np.float64 )
+            log_nu_K_i_setter_lse( self._log_nu_K_i, self.C_K_ij )
         # citation information
         self.citation = [
                 "Statistically optimal analysis of state-discretized trajectory data",
@@ -69,7 +75,7 @@ class DTRAM( Estimator ):
         if self.tagged:
             return self._pi_i
         else:
-            return None
+            return np.exp( -self._f_i )
 
     @property
     def pi_K_i( self ):
@@ -78,7 +84,7 @@ class DTRAM( Estimator ):
                 self._pi_K_i = self.f_K[:,np.newaxis] * self.pi_i[np.newaxis,:] * self.gamma_K_i
             return self._pi_K_i
         else:
-            return None
+            return self.f_K[:,np.newaxis] * self.pi_i[np.newaxis,:] * self.gamma_K_i
 
     @property
     def f_K( self ):
@@ -87,7 +93,7 @@ class DTRAM( Estimator ):
                 self._f_K = 1.0 / np.dot( self.gamma_K_i, self.pi_i )
             return self._f_K
         else:
-            return None
+            return 1.0 / np.dot( self.gamma_K_i, self.pi_i )
 
     @property
     def nu_K_i( self ):
@@ -147,7 +153,31 @@ class DTRAM( Estimator ):
             if finc > ftol:
                 raise NotConvergedWarning( "DTRAM", finc )
         else:
-            pass
+            scratch_K_j = np.zeros( shape=(self.n_therm_states,self.n_markov_states), dtype=np.float64 )
+            scratch_j = np.zeros( shape=(self.n_markov_states,), dtype=np.float64 )
+            if verbose:
+                print "# %25s %25s" % ( "[iteration step]", "[increment]" )
+            # start the iteration loop
+            for i in xrange( maxiter ):
+                # iterate log_nu_K_i
+                tmp_log_nu_K_i = np.copy( self._log_nu_K_i )
+                log_nu_K_i_equation_lse( tmp_log_nu_K_i, self._b_K_i, self._f_i, self.C_K_ij, scratch_j, self._log_nu_K_i )
+                # iterate f_i
+                tmp_f_i = np.copy( self._f_i )
+                f_i_equation_lse( self._log_nu_K_i, self._b_K_i, tmp_f_i, self.C_K_ij, scratch_K_j, self._f_i )
+                # normalize pi_i
+                self._f_i += np.log( self.pi_i.sum() )
+                # compute the absolute change of f_i
+                finc = np.max( np.abs( tmp_f_i - self._f_i ) )
+                # write out progress if requested
+                if verbose:
+                    print " %25d %25.12e" % ( i+1, finc )
+                # break loop if we're converged
+                if finc < ftol:
+                    break
+            # complain if we're not yet converged
+            if finc > ftol:
+                raise NotConvergedWarning( "DTRAM", finc )
 
     ############################################################################
     #
@@ -168,7 +198,8 @@ class DTRAM( Estimator ):
         if self.tagged:
             p_K_ij_equation_tagged( self.nu_K_i, self.gamma_K_i, self.pi_i, self.C_K_ij, p_K_ij )
         else:
-            pass
+            scratch_j = np.zeros( shape=(self.n_markov_states,), dtype=np.float64 )
+            p_K_ij_equation_lse( self._log_nu_K_i, self._b_K_i, self._f_i, self.C_K_ij, scratch_j, p_K_ij )
         return p_K_ij
 
     def estimate_transition_matrix( self, I ):
@@ -213,5 +244,5 @@ class DTRAM( Estimator ):
         if self.tagged:
             return self._gamma_K_i
         else:
-            return None
+            return np.exp( -self._b_K_i )
 
