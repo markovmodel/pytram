@@ -10,7 +10,7 @@ import numpy as np
 cimport numpy as np
 
 cdef extern from "_dtram.h":
-    void _nu_K_i_equation(
+    void _nu_K_i_equation_tagged(
             double *nu_K_i,
             double *gamma_K_i,
             double* pi_i,
@@ -19,7 +19,7 @@ cdef extern from "_dtram.h":
             int n_markov_states,
             double *new_nu_K_i
         )
-    void _pi_i_equation(
+    void _pi_i_equation_tagged(
             double *nu_K_i,
             double *gamma_K_i,
             double* pi_i,
@@ -28,7 +28,7 @@ cdef extern from "_dtram.h":
             int n_markov_states,
             double *new_pi_i
         )
-    void _p_K_ij_equation(
+    void _p_K_ij_equation_tagged(
             double *nu_K_i,
             double *gamma_K_i,
             double *pi_i,
@@ -38,14 +38,14 @@ cdef extern from "_dtram.h":
             double *p_K_ij
         )
 
-def nu_K_i_equation(
+def nu_K_i_equation_tagged(
         np.ndarray[double, ndim=2, mode="c"] nu_K_i not None,
         np.ndarray[double, ndim=2, mode="c"] gamma_K_i not None,
         np.ndarray[double, ndim=1, mode="c"] pi_i not None,
         np.ndarray[int, ndim=3, mode="c"] C_K_ij not None,
         np.ndarray[double, ndim=2, mode="c"] new_nu_K_i not None
     ):
-    _nu_K_i_equation(
+    _nu_K_i_equation_tagged(
             <double*> np.PyArray_DATA( nu_K_i ),
             <double*> np.PyArray_DATA( gamma_K_i ),
             <double*> np.PyArray_DATA( pi_i ),
@@ -55,14 +55,14 @@ def nu_K_i_equation(
             <double*> np.PyArray_DATA( new_nu_K_i )
         )
 
-def pi_i_equation(
+def pi_i_equation_tagged(
         np.ndarray[double, ndim=2, mode="c"] nu_K_i not None,
         np.ndarray[double, ndim=2, mode="c"] gamma_K_i not None,
         np.ndarray[double, ndim=1, mode="c"] pi_i not None,
         np.ndarray[int, ndim=3, mode="c"] C_K_ij not None,
         np.ndarray[double, ndim=1, mode="c"] new_pi_i not None
     ):
-    _pi_i_equation(
+    _pi_i_equation_tagged(
             <double*> np.PyArray_DATA( nu_K_i ),
             <double*> np.PyArray_DATA( gamma_K_i ),
             <double*> np.PyArray_DATA( pi_i ),
@@ -72,14 +72,14 @@ def pi_i_equation(
             <double*> np.PyArray_DATA( new_pi_i )
         )
 
-def p_K_ij_equation(
+def p_K_ij_equation_tagged(
         np.ndarray[double, ndim=2, mode="c"] nu_K_i not None,
         np.ndarray[double, ndim=2, mode="c"] gamma_K_i not None,
         np.ndarray[double, ndim=1, mode="c"] pi_i not None,
         np.ndarray[int, ndim=3, mode="c"] C_K_ij not None,
         np.ndarray[double, ndim=3, mode="c"] p_K_ij not None
     ):
-    _p_K_ij_equation(
+    _p_K_ij_equation_tagged(
             <double*> np.PyArray_DATA( nu_K_i ),
             <double*> np.PyArray_DATA( gamma_K_i ),
             <double*> np.PyArray_DATA( pi_i ),

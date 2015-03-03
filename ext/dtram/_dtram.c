@@ -9,7 +9,7 @@
 #include "_dtram.h"
 
 
-void _nu_K_i_equation(
+void _nu_K_i_equation_tagged(
     double *nu_K_i,
     double *gamma_K_i,
     double *pi_i,
@@ -58,7 +58,7 @@ void _nu_K_i_equation(
     }
 }
 
-void _pi_i_equation(
+void _pi_i_equation_tagged(
     double *nu_K_i,
     double *gamma_K_i,
     double *pi_i,
@@ -111,7 +111,7 @@ void _pi_i_equation(
     }
 }
 
-void _p_K_ij_equation(
+void _p_K_ij_equation_tagged(
     double *nu_K_i,
     double *gamma_K_i,
     double *pi_i,
