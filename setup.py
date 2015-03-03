@@ -3,6 +3,12 @@ from distutils.core import Extension
 from Cython.Distutils import build_ext
 import numpy as np
 
+ext_lse = Extension(
+        "pytram.lse",
+        sources=["ext/lse/lse.pyx", "ext/lse/_lse.c" ],
+        include_dirs=[np.get_include()],
+        extra_compile_args=["-O3"]
+    )
 ext_dtram = Extension(
         "pytram.dtram.ext",
         sources=["ext/dtram/dtram.pyx", "ext/dtram/_dtram.c" ],
@@ -19,6 +25,7 @@ ext_xtram = Extension(
 setup(
     cmdclass={'build_ext': build_ext},
     ext_modules=[
+            ext_lse,
             ext_dtram,
             ext_xtram
         ],
