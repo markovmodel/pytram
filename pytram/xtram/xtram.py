@@ -47,7 +47,6 @@ class XTRAM( Estimator ):
             default : 0
         """
         super( XTRAM, self ).__init__( C_K_ij )
-        #self._citation()
         if self._check_u_I_x( u_I_x ):
             self._u_I_x = u_I_x
         if self._check_M_x( M_x ):
@@ -63,6 +62,14 @@ class XTRAM( Estimator ):
         self._ftol = 10e-15
         self._maxiter = 100000
         self.target = target
+        # citation information
+        self.citation = [
+                "xTRAM: Estimating Equilibrium Expectations from Time-Correlated Simulation",
+                "Data at Multiple Thermodynamic States;",
+                "Antonia S.J.S. Mey, Hao Wu, and Frank Noe",
+                "Phys. Rev. X 4, 041018 (2014)"
+            ]
+
 
 
     ############################################################################
@@ -326,23 +333,6 @@ class XTRAM( Estimator ):
         
     def _compute_w_K( self ):
         return self.N_K.astype(float)/np.sum(self.N_K) #weight array based on thermodynamics sample counts
-
-    ####################################################################
-    #                                                                  #
-    # prints the needed citation                                       #
-    #                                                                  #
-    ####################################################################
-
-    def _citation( self ):
-        r"""Prints citation string"""
-        citation_string = (
-            "If you use this method for your data analysis please do not forget to cite:\n"
-            "xTRAM: Estimating Equilibrium Expectations from Time-Correlated Simulation\n" 
-            "Data at Multiple Thermodynamic States \n"
-            "Antonia S. J. S. Mey, Hao Wu and Frank Noe, \n"
-            "Phys. Rev. X 4, 041018")
-        
-        print citation_string
 
     ####################################################################
     #                                                                  #
