@@ -11,7 +11,7 @@ ext_lse = Extension(
     )
 ext_dtram = Extension(
         "pytram.dtram.ext",
-        sources=["ext/dtram/dtram.pyx", "ext/dtram/_dtram.c" ],
+        sources=["ext/dtram/dtram.pyx", "ext/dtram/_dtram.c", "ext/lse/_lse.c" ],
         include_dirs=[np.get_include()],
         extra_compile_args=["-O3"]
     )
