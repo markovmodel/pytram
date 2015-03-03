@@ -10,7 +10,7 @@ import numpy as np
 cimport numpy as np
 
 cdef extern from "_dtram.h":
-    void _nu_K_ij_equation(
+    void _nu_K_i_equation(
             double *nu_K_i,
             double *gamma_K_i,
             double* pi_i,
@@ -38,14 +38,14 @@ cdef extern from "_dtram.h":
             double *p_K_ij
         )
 
-def nu_K_ij_equation(
+def nu_K_i_equation(
         np.ndarray[double, ndim=2, mode="c"] nu_K_i not None,
         np.ndarray[double, ndim=2, mode="c"] gamma_K_i not None,
         np.ndarray[double, ndim=1, mode="c"] pi_i not None,
         np.ndarray[int, ndim=3, mode="c"] C_K_ij not None,
         np.ndarray[double, ndim=2, mode="c"] new_nu_K_i not None
     ):
-    _nu_K_ij_equation(
+    _nu_K_i_equation(
             <double*> np.PyArray_DATA( nu_K_i ),
             <double*> np.PyArray_DATA( gamma_K_i ),
             <double*> np.PyArray_DATA( pi_i ),

@@ -10,7 +10,7 @@ dTRAM estimator module
 
 import numpy as np
 from ..estimator import Estimator, NotConvergedWarning, ExpressionError
-from .ext import nu_K_ij_equation, pi_i_equation, p_K_ij_equation
+from .ext import nu_K_i_equation, pi_i_equation, p_K_ij_equation
 
 
 
@@ -108,7 +108,7 @@ class DTRAM( Estimator ):
         for i in xrange( maxiter ):
             # iterate nu_K_i
             tmp_nu_K_i = np.copy( self.nu_K_i )
-            nu_K_ij_equation( tmp_nu_K_i, self.gamma_K_i, self.pi_i, self.C_K_ij, self._nu_K_i )
+            nu_K_i_equation( tmp_nu_K_i, self.gamma_K_i, self.pi_i, self.C_K_ij, self._nu_K_i )
             # iterate pi_i
             tmp_pi_i = np.copy( self.pi_i )
             pi_i_equation( self.nu_K_i, self.gamma_K_i, tmp_pi_i, self.C_K_ij, self._pi_i )
