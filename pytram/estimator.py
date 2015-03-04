@@ -87,11 +87,11 @@ class Estimator( object ):
 
     @property
     def pi_i( self ):
-        raise NotImplementedError( "Override in derived class!" )
+        return np.exp( -self.f_i )
 
     @property
     def pi_K_i( self ):
-        raise NotImplementedError( "Override in derived class!" )
+        return np.exp( -self.f_K_i )
 
     @property
     def f_K( self ):
