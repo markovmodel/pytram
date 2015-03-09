@@ -25,7 +25,7 @@ class DTRAM( Estimator ):
     r"""
     The dTRAM estimator class
     """
-    def __init__( self, C_K_ij, b_K_i, tagged=True ):
+    def __init__( self, C_K_ij, b_K_i, tagged=False ):
         r"""
         Initialize the DTRAM object
         
