@@ -56,6 +56,15 @@ void _p_K_ij_equation_lse(
     double *p_K_ij
 );
 
+void _f_K_equation_lse(
+    double *b_K_i,
+    double *f_i,
+    int n_therm_states,
+    int n_markov_states,
+    double *scratch_j,
+    double *f_K
+);
+
 void _nu_K_i_equation_tagged(
     double *nu_K_i,
     double *gamma_K_i,

@@ -208,7 +208,23 @@ void _p_K_ij_equation_lse(
 }
 
 
-
+void _f_K_equation_lse(
+    double *b_K_i,
+    double *f_i,
+    int n_therm_states,
+    int n_markov_states,
+    double *scratch_j,
+    double *f_K
+)
+{
+    int K, i;
+    for( K=0; K<n_therm_states; ++K )
+    {
+        for( i=0; i<n_markov_states; ++i )
+            scratch_j[i] = -( b_K_i[K*n_markov_states+i] + f_i[i] );
+        f_K[K] = _logsumexp( scratch_j, n_markov_states );
+    }
+}
 
 
 

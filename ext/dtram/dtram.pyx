@@ -47,6 +47,15 @@ cdef extern from "_dtram.h":
             double *scratch_j,
             double *p_K_ij
         )
+
+    void _f_K_equation_lse(
+            double *b_K_i,
+            double *f_i,
+            int n_therm_states,
+            int n_markov_states,
+            double *scratch_j,
+            double *f_K
+        )
     void _nu_K_i_equation_tagged(
             double *nu_K_i,
             double *gamma_K_i,
@@ -143,6 +152,21 @@ def p_K_ij_equation_lse(
             log_nu_K_i.shape[1],
             <double*> np.PyArray_DATA( scratch_j ),
             <double*> np.PyArray_DATA( p_K_ij )
+        )
+
+def f_K_equation_lse(
+        np.ndarray[double, ndim=2, mode="c"] b_K_i not None,
+        np.ndarray[double, ndim=1, mode="c"] f_i not None,
+        np.ndarray[double, ndim=1, mode="c"] scratch_j not None,
+        np.ndarray[double, ndim=1, mode="c"] f_K not None
+    ):
+    _f_K_equation_lse(
+            <double*> np.PyArray_DATA( b_K_i ),
+            <double*> np.PyArray_DATA( f_i ),
+            b_K_i.shape[0],
+            b_K_i.shape[1],
+            <double*> np.PyArray_DATA( scratch_j ),
+            <double*> np.PyArray_DATA( f_K )
         )
 
 

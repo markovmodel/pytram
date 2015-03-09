@@ -11,7 +11,7 @@ dTRAM estimator module
 import numpy as np
 from ..estimator import Estimator, NotConvergedWarning, ExpressionError
 from .ext import nu_K_i_equation_tagged, pi_i_equation_tagged, p_K_ij_equation_tagged
-from .ext import log_nu_K_i_setter_lse, log_nu_K_i_equation_lse, f_i_equation_lse, p_K_ij_equation_lse
+from .ext import log_nu_K_i_setter_lse, log_nu_K_i_equation_lse, f_i_equation_lse, p_K_ij_equation_lse, f_K_equation_lse
 
 
 
@@ -84,7 +84,7 @@ class DTRAM( Estimator ):
                 self._pi_K_i = self.f_K[:,np.newaxis] * self.pi_i[np.newaxis,:] * self.gamma_K_i
             return self._pi_K_i
         else:
-            return self.f_K[:,np.newaxis] * self.pi_i[np.newaxis,:] * self.gamma_K_i
+            return np.exp( -( self.f_K[:,np.newaxis] + self._b_K_i + self._f_i[np.newaxis,:] ) )
 
     @property
     def f_K( self ):
@@ -93,7 +93,10 @@ class DTRAM( Estimator ):
                 self._f_K = 1.0 / np.dot( self.gamma_K_i, self.pi_i )
             return self._f_K
         else:
-            return 1.0 / np.dot( self.gamma_K_i, self.pi_i )
+            _f_K = np.zeros( shape=(self.n_therm_states,), dtype=np.float64 )
+            scratch_j = np.zeros( shape=(self.n_markov_states,), dtype=np.float64 )
+            f_K_equation_lse( self._b_K_i, self._f_i, scratch_j, _f_K )
+            return _f_K
 
     @property
     def nu_K_i( self ):
