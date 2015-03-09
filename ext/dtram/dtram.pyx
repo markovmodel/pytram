@@ -34,6 +34,7 @@ cdef extern from "_dtram.h":
             int n_therm_states,
             int n_markov_states,
             double *scratch_K_j,
+            double *scratch_j,
             double *new_f_i
         )
     void _p_K_ij_equation_lse(
@@ -110,6 +111,7 @@ def f_i_equation_lse(
         np.ndarray[double, ndim=1, mode="c"] f_i not None,
         np.ndarray[int, ndim=3, mode="c"] C_K_ij not None,
         np.ndarray[double, ndim=2, mode="c"] scratch_K_j not None,
+        np.ndarray[double, ndim=1, mode="c"] scratch_j not None,
         np.ndarray[double, ndim=1, mode="c"] new_f_i not None
     ):
     _f_i_equation_lse(
@@ -120,6 +122,7 @@ def f_i_equation_lse(
             log_nu_K_i.shape[0],
             log_nu_K_i.shape[1],
             <double*> np.PyArray_DATA( scratch_K_j ),
+            <double*> np.PyArray_DATA( scratch_j ),
             <double*> np.PyArray_DATA( new_f_i )
         )
 

@@ -41,6 +41,7 @@ void _f_i_equation_lse(
     int n_therm_states,
     int n_markov_states,
     double *scratch_K_j,
+    double *scratch_j,
     double *new_f_i
 );
 

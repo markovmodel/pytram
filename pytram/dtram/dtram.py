@@ -164,9 +164,7 @@ class DTRAM( Estimator ):
                 log_nu_K_i_equation_lse( tmp_log_nu_K_i, self._b_K_i, self._f_i, self.C_K_ij, scratch_j, self._log_nu_K_i )
                 # iterate f_i
                 tmp_f_i = np.copy( self._f_i )
-                f_i_equation_lse( self._log_nu_K_i, self._b_K_i, tmp_f_i, self.C_K_ij, scratch_K_j, self._f_i )
-                # normalize pi_i
-                self._f_i += np.log( self.pi_i.sum() )
+                f_i_equation_lse( self._log_nu_K_i, self._b_K_i, tmp_f_i, self.C_K_ij, scratch_K_j, scratch_j, self._f_i )
                 # compute the absolute change of f_i
                 finc = np.max( np.abs( tmp_f_i - self._f_i ) )
                 # write out progress if requested

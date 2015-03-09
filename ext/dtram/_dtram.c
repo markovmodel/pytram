@@ -97,13 +97,14 @@ void _f_i_equation_lse(
     int n_therm_states,
     int n_markov_states,
     double *scratch_K_j,
+    double *scratch_j,
     double *new_f_i
 )
 {
     int i, j, K;
     int MM = n_markov_states * n_markov_states, KM = n_therm_states * n_markov_states, Ki, Kj;
     int CK, CKij, CKji, Ci;
-    double divisor;
+    double divisor, norm;
     for( i=0; i<n_markov_states; ++i )
     {
         Ci = 0;
@@ -144,7 +145,11 @@ void _f_i_equation_lse(
         }
         /* patch Ci and the total divisor together */
         new_f_i[i] = _logsumexp( scratch_K_j, KM ) - log( n_therm_states * PYTRAM_DTRAM_PRIOR + (double) Ci );
+        scratch_j[i] = -new_f_i[i];
     }
+    norm = _logsumexp( scratch_j, n_markov_states );
+    for( i=0; i<n_markov_states; ++i )
+        new_f_i[i] += norm;
 }
 
 void _p_K_ij_equation_lse(
