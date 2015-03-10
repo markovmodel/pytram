@@ -15,14 +15,14 @@
 #define PYTRAM_DTRAM_PRIOR 1.0E-10
 #define PYTRAM_DTRAM_LOG_PRIOR -23.025850929940457
 
-void _log_nu_K_i_setter_lse(
+void _log_nu_K_i_setter(
     double *log_nu_K_i,
     int *C_K_ij,
     int n_therm_states,
     int n_markov_states
 );
 
-void _log_nu_K_i_equation_lse(
+void _log_nu_K_i_equation(
     double *log_nu_K_i,
     double *b_K_i,
     double *f_i,
@@ -33,7 +33,7 @@ void _log_nu_K_i_equation_lse(
     double *new_log_nu_K_i
 );
 
-void _f_i_equation_lse(
+void _f_i_equation(
     double *log_nu_K_i,
     double *b_K_i,
     double *f_i,
@@ -45,7 +45,7 @@ void _f_i_equation_lse(
     double *new_f_i
 );
 
-void _p_K_ij_equation_lse(
+void _p_K_ij_equation(
     double *log_nu_K_i,
     double *b_K_i,
     double *f_i,
@@ -56,7 +56,7 @@ void _p_K_ij_equation_lse(
     double *p_K_ij
 );
 
-void _f_K_equation_lse(
+void _f_K_equation(
     double *b_K_i,
     double *f_i,
     int n_therm_states,

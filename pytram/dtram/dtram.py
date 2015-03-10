@@ -10,7 +10,7 @@ dTRAM estimator module
 
 import numpy as np
 from ..estimator import Estimator, NotConvergedWarning, ExpressionError
-from .ext import log_nu_K_i_setter_lse, log_nu_K_i_equation_lse, f_i_equation_lse, p_K_ij_equation_lse, f_K_equation_lse
+from .ext import log_nu_K_i_setter, log_nu_K_i_equation, f_i_equation, p_K_ij_equation, f_K_equation
 
 
 
@@ -42,7 +42,7 @@ class DTRAM( Estimator ):
         # hard-coded initial guess for pi_i and nu_K_i
         self._f_i = np.zeros( shape=(self.n_markov_states,), dtype=np.float64 )
         self._log_nu_K_i = np.zeros( shape=(self.n_therm_states,self.n_markov_states), dtype=np.float64 )
-        log_nu_K_i_setter_lse( self._log_nu_K_i, self.C_K_ij )
+        log_nu_K_i_setter( self._log_nu_K_i, self.C_K_ij )
         # citation information
         self.citation = [
                 "Statistically optimal analysis of state-discretized trajectory data",
@@ -69,7 +69,7 @@ class DTRAM( Estimator ):
     def f_K( self ):
         _f_K = np.zeros( shape=(self.n_therm_states,), dtype=np.float64 )
         scratch_j = np.zeros( shape=(self.n_markov_states,), dtype=np.float64 )
-        f_K_equation_lse( self._b_K_i, self._f_i, scratch_j, _f_K )
+        f_K_equation( self._b_K_i, self._f_i, scratch_j, _f_K )
         return _f_K
 
     @property
@@ -103,10 +103,10 @@ class DTRAM( Estimator ):
         for i in xrange( maxiter ):
             # iterate log_nu_K_i
             tmp_log_nu_K_i = np.copy( self._log_nu_K_i )
-            log_nu_K_i_equation_lse( tmp_log_nu_K_i, self._b_K_i, self._f_i, self.C_K_ij, scratch_j, self._log_nu_K_i )
+            log_nu_K_i_equation( tmp_log_nu_K_i, self._b_K_i, self._f_i, self.C_K_ij, scratch_j, self._log_nu_K_i )
             # iterate f_i
             tmp_f_i = np.copy( self._f_i )
-            f_i_equation_lse( self._log_nu_K_i, self._b_K_i, tmp_f_i, self.C_K_ij, scratch_K_j, scratch_j, self._f_i )
+            f_i_equation( self._log_nu_K_i, self._b_K_i, tmp_f_i, self.C_K_ij, scratch_K_j, scratch_j, self._f_i )
             # compute the absolute change of f_i
             finc = np.max( np.abs( tmp_f_i - self._f_i ) )
             # write out progress if requested
@@ -136,7 +136,7 @@ class DTRAM( Estimator ):
         """
         p_K_ij = np.zeros( shape=self.C_K_ij.shape, dtype=np.float64 )
         scratch_j = np.zeros( shape=(self.n_markov_states,), dtype=np.float64 )
-        p_K_ij_equation_lse( self._log_nu_K_i, self._b_K_i, self._f_i, self.C_K_ij, scratch_j, p_K_ij )
+        p_K_ij_equation( self._log_nu_K_i, self._b_K_i, self._f_i, self.C_K_ij, scratch_j, p_K_ij )
         return p_K_ij
 
     def estimate_transition_matrix( self, I ):

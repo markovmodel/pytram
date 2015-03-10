@@ -34,7 +34,7 @@ def test_expression_error_int16():
 def test_expression_error_float32():
     assert_raises( ExpressionError, DTRAM, np.ones( shape=(2,3,3), dtype=np.intc ), np.ones( shape=(2,3), dtype=np.float32 ) )
 
-def test_three_state_model_lse():
+def test_three_state_model():
     C_K_ij = np.array( [[[2358,29,0],[29,0,32],[0,32,197518]],[[16818,16763,0],[16763,0,16510],[0,16510,16635]]], dtype=np.intc )
     b_K_i = np.array( [ [ 0.0, 0.0, 0.0 ], [ 4.0, 0.0, 8.0 ] ], dtype=np.float64 )
     dtram = DTRAM( C_K_ij, b_K_i )
