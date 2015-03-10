@@ -33,7 +33,7 @@ def dtram_me( C_K_ij, b_K_i, maxiter=100, ftol=1.0E-5, verbose=False ):
     maxiter : int
         maximum number of SCF iteration steps during the optimisation of the stationary probabilities
     ftol : float (> 0.0)
-        convergence criterion based on the max relative change in an self-consistent-iteration step
+        convergence criterion based on the max change in an self-consistent-iteration step
     verbose : boolean
         writes convergence information to stdout during the self-consistent-iteration cycle
     
@@ -57,7 +57,7 @@ def dtram_me( C_K_ij, b_K_i, maxiter=100, ftol=1.0E-5, verbose=False ):
     except NotConvergedWarning, e:
         print "# WARNING ##########################################################################"
         print "# dTRAM did not converge within %d steps!" % maxiter
-        print "# The last relative increment was %.6e." % e.relative_increment
+        print "# The last increment was %.6e." % e.increment
         print "# You should run the < sc_iteration > method again."
         print "# USE RESULTS WITH CARE ############################################################"
     finally:
@@ -86,7 +86,7 @@ def dtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, verbo
     maxiter : int
         maximum number of SCF iteration steps during the optimisation of the stationary probabilities
     ftol : float (> 0.0)
-        convergence criterion based on the max relative change in an self-consistent-iteration step
+        convergence criterion based on the max change in an self-consistent-iteration step
     verbose : boolean
         writes convergence information to stdout during the self-consistent-iteration cycle
     
@@ -125,7 +125,7 @@ def xtram_me( C_K_ij, u_I_x, T_x, M_x, N_K_i, maxiter=100, ftol=1.0E-5, target =
     target : int
         integer of the thermodynamic state for which results should be estiamted
     ftol : float (> 0.0)
-        convergence criterion based on the max relative change in an self-consistent-iteration step
+        convergence criterion based on the max change in an self-consistent-iteration step
     verbose : boolean
         writes convergence information to stdout during the self-consistent-iteration cycle
     
@@ -149,7 +149,7 @@ def xtram_me( C_K_ij, u_I_x, T_x, M_x, N_K_i, maxiter=100, ftol=1.0E-5, target =
     except NotConvergedWarning, e:
         print "# WARNING ##########################################################################"
         print "# xTRAM did not converge within %d steps!" % maxiter
-        print "# The last relative increment was %.6e." % e.relative_increment
+        print "# The last increment was %.6e." % e.increment
         print "# You should run the < sc_iteration > method again."
         print "# USE RESULTS WITH CARE ############################################################"
     finally:
@@ -177,7 +177,7 @@ def xtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, targe
     maxiter : int
         maximum number of SCF iteration steps during the optimisation of the stationary probabilities
     ftol : float (> 0.0)
-        convergence criterion based on the max relative change in an self-consistent-iteration step
+        convergence criterion based on the max change in an self-consistent-iteration step
     target : int
         integer of the thermodynamic state for which results should be estiamted
     verbose : boolean

@@ -135,8 +135,8 @@ class NotConvergedWarning( Exception ):
     r"""
     Exception class for non-convergence of estimators
     """
-    def __init__( self, estimator, relative_increment ):
+    def __init__( self, estimator, increment ):
         self.estimator = estimator
-        self.relative_increment = relative_increment
+        self.increment = increment
     def __str__( self ):
-        return "[%s] only reached relative increment %.3e" % ( self.estimator, self.relative_increment )
+        return "[%s] only reached increment %.3e" % ( self.estimator, self.increment )
