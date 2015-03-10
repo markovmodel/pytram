@@ -26,7 +26,7 @@ class XTRAM( Estimator ):
     r"""
     I am the xTRAM estimator
     """
-    def __init__( self, C_K_ij, u_I_x, T_x, M_x, N_K_i, target=0 ):
+    def __init__( self, C_K_ij, b_K_x, T_x, M_x, N_K_i, target=0 ):
         r"""
         Initialize the XTRAM object
         
@@ -34,7 +34,7 @@ class XTRAM( Estimator ):
         ----------
         C_K_ij : 3-D numpy array
             Countmatrix for each thermodynamic state K
-        u_I_x : 2-D numpy array
+        b_K_x : 2-D numpy array
             Biasing tensor
         T_x : 1-D numpy array
             Thermodynamic state trajectory
@@ -47,8 +47,8 @@ class XTRAM( Estimator ):
             default : 0
         """
         super( XTRAM, self ).__init__( C_K_ij )
-        if self._check_u_I_x( u_I_x ):
-            self._u_I_x = u_I_x
+        if self._check_b_K_x( b_K_x ):
+            self._b_K_x = b_K_x
         if self._check_M_x( M_x ):
             self._M_x = M_x
         if self._check_T_x( T_x ):
@@ -117,7 +117,7 @@ class XTRAM( Estimator ):
             print "# %25s %25s" % ( "[Step]", "[rel. Increment]" )
         for i in xrange( maxiter ):
             f_old[:]=self.f_K[:]
-            b_i_IJ_equation( self.T_x, self.M_x, self.N_K, self.f_K, self.w_K, self.u_I_x, self.b_i_IJ )
+            b_i_IJ_equation( self.T_x, self.M_x, self.N_K, self.f_K, self.w_K, self.b_K_x, self.b_i_IJ )
             N_tilde = self._compute_sparse_N()
             C_i, C_j, C_ij, C_ji = self._compute_individual_N()
             x_row, c_column = self._initialise_X_and_N( N_tilde )
@@ -293,12 +293,12 @@ class XTRAM( Estimator ):
         for x in xrange(self.T_x.shape[0]):
             I = self.T_x[x]
             if I==0:
-                I_plus_one[I]+=self._metropolis(self.u_I_x[I,x],self.u_I_x[I+1,x])
+                I_plus_one[I]+=self._metropolis(self.b_K_x[I,x],self.b_K_x[I+1,x])
             elif I==self.n_therm_states-1:
-                I_minus_one[I]+=self._metropolis(self.u_I_x[I,x], self.u_I_x[I-1,x])
+                I_minus_one[I]+=self._metropolis(self.b_K_x[I,x], self.b_K_x[I-1,x])
             else:
-                I_plus_one[I]+=self._metropolis(self.u_I_x[I,x],self.u_I_x[I+1,x])
-                I_minus_one[I]+=self._metropolis(self.u_I_x[I,x], self.u_I_x[I-1,x])
+                I_plus_one[I]+=self._metropolis(self.b_K_x[I,x],self.b_K_x[I+1,x])
+                I_minus_one[I]+=self._metropolis(self.b_K_x[I,x], self.b_K_x[I-1,x])
         for I in xrange(bar_ratio.shape[0]):
             bar_ratio[I]=(I_plus_one[I]/I_minus_one[I+1])*(self.N_K[I+1].astype('float')/self.N_K[I].astype('float'))
         return bar_ratio
@@ -341,20 +341,20 @@ class XTRAM( Estimator ):
     ####################################################################
 
     @property
-    def u_I_x( self ):
-        return self._u_I_x
+    def b_K_x( self ):
+        return self._b_K_x
 
-    def _check_u_I_x( self, u_I_x ):
-        if u_I_x is None:
-            raise ExpressionError( "u_I_x", "is None" )
-        if not isinstance( u_I_x, (np.ndarray,) ):
-            raise ExpressionError( "u_I_x", "invalid type (%s)" % str( type( u_I_x ) ) )
-        if 2 != u_I_x.ndim:
-            raise ExpressionError( "u_I_x", "invalid number of dimensions (%d)" % u_I_x.ndim )
-        if u_I_x.shape[0] != self.n_therm_states:
-            raise ExpressionError( "u_I_x", "unmatching number of thermodynamic states (%d,%d)" % (u_I_x.shape[0], self.n_therm_states) )
-        if np.float64 != u_I_x.dtype:
-            raise ExpressionError( "u_I_x", "invalid dtype (%s)" % str( u_I_x.dtype ) )
+    def _check_b_K_x( self, b_K_x ):
+        if b_K_x is None:
+            raise ExpressionError( "b_K_x", "is None" )
+        if not isinstance( b_K_x, (np.ndarray,) ):
+            raise ExpressionError( "b_K_x", "invalid type (%s)" % str( type( b_K_x ) ) )
+        if 2 != b_K_x.ndim:
+            raise ExpressionError( "b_K_x", "invalid number of dimensions (%d)" % b_K_x.ndim )
+        if b_K_x.shape[0] != self.n_therm_states:
+            raise ExpressionError( "b_K_x", "unmatching number of thermodynamic states (%d,%d)" % (b_K_x.shape[0], self.n_therm_states) )
+        if np.float64 != b_K_x.dtype:
+            raise ExpressionError( "b_K_x", "invalid dtype (%s)" % str( b_K_x.dtype ) )
         return True
 
     @property
@@ -368,8 +368,8 @@ class XTRAM( Estimator ):
             raise ExpressionError( "M_x", "invalid type (%s)" % str( type( M_x ) ) )
         if 1 != M_x.ndim:
             raise ExpressionError( "M_x", "invalid number of dimensions (%d)" % M_x.ndim )
-        if M_x.shape[0] != self.u_I_x.shape[1]:
-            raise ExpressionError( "M_x", "unmatching number thermodynamic samples (%d,%d)" % (M_x.shape[0], self.u_I_x.shape[1]) )
+        if M_x.shape[0] != self.b_K_x.shape[1]:
+            raise ExpressionError( "M_x", "unmatching number thermodynamic samples (%d,%d)" % (M_x.shape[0], self.b_K_x.shape[1]) )
         if np.intc != M_x.dtype:
             raise ExpressionError( "M_x", "invalid dtype (%s)" % str( M_x.dtype ) )
         return True
@@ -385,8 +385,8 @@ class XTRAM( Estimator ):
             raise ExpressionError( "T_x", "invalid type (%s)" % str( type( T_x ) ) )
         if 1 != T_x.ndim:
             raise ExpressionError( "T_x", "invalid number of dimensions (%d)" % T_x.ndim )
-        if T_x.shape[0] != self.u_I_x.shape[1]:
-            raise ExpressionError( "T_x", "unmatching number thermodynamic samples (%d,%d)" % ( T_x.shape[0], self.u_I_x.shape[1] ) )
+        if T_x.shape[0] != self.b_K_x.shape[1]:
+            raise ExpressionError( "T_x", "unmatching number thermodynamic samples (%d,%d)" % ( T_x.shape[0], self.b_K_x.shape[1] ) )
         if np.intc != T_x.dtype:
             raise ExpressionError( "T_x", "invalid dtype (%s)" % str( T_x.dtype ) )
         return True

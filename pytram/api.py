@@ -104,7 +104,7 @@ def dtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, verbo
 #
 ####################################################################################################
 
-def xtram_me( C_K_ij, u_I_x, T_x, M_x, N_K_i, maxiter=100, ftol=1.0E-5, target = 0, verbose=False ):
+def xtram_me( C_K_ij, b_K_x, T_x, M_x, N_K_i, maxiter=100, ftol=1.0E-5, target = 0, verbose=False ):
     r"""
     The xTRAM API function
     
@@ -112,8 +112,8 @@ def xtram_me( C_K_ij, u_I_x, T_x, M_x, N_K_i, maxiter=100, ftol=1.0E-5, target =
     ----------
     C_K_ij : numpy.ndarray( shape=(T,M,M), dtype=numpy.intc )
         transition counts between the M discrete Markov states for each of the T thermodynamic ensembles
-    u_I_x : numpy.ndarray( shape=(T,L), dtype=numpy.float64 )
-        biased energy evaluated at thermodynamic stated T over all sampled data of length L
+    b_K_x : numpy.ndarray( shape=(T,L), dtype=numpy.float64 )
+        bias energy evaluated at thermodynamic states T over all sampled data of length L
     T_x : numpy.ndarray( shape=(L), dtype=numpy.intc )
         thermodynamic states over all sampled data of length L
     M_x : numpy.ndarray( shape=(L), dytpe=numpy.intc )
@@ -136,7 +136,7 @@ def xtram_me( C_K_ij, u_I_x, T_x, M_x, N_K_i, maxiter=100, ftol=1.0E-5, target =
     """
     # try to create the XTRAM object
     try:
-        xtram_obj = XTRAM( C_K_ij, u_I_x, T_x, M_x, N_K_i, target )
+        xtram_obj = XTRAM( C_K_ij, b_K_x, T_x, M_x, N_K_i, target )
     except ExpressionError, e:
         print "# ERROR ############################################################################"
         print "# Your input was faulty!"
@@ -190,7 +190,7 @@ def xtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, targe
     """
     return xtram_me(
             tramdata.get_C_K_ij( lag ),
-            tramdata.u_I_x,
+            tramdata.b_K_x,
             tramdata.T_x,
             tramdata.M_x,
             tramdata.N_K_i,

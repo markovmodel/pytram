@@ -30,7 +30,7 @@ class TRAMData( object ):
             each dictionary contains the following entries:
             'm' markov sequence in a 1-D numpy array of integers
             't' thermodynamic sequence in a 1-D numpy array of integers
-            'u' reduced bias energy sequences in a 2-D numpy array of floats
+            'b' reduced bias energy sequences in a 2-D numpy array of floats
         b_K_i : 2D numpy array 
             contains discrete reduced bias energies
             Default = None
@@ -42,7 +42,7 @@ class TRAMData( object ):
         self._N_K = None
         self._M_x = None
         self._T_x = None
-        self._u_I_x = None
+        self._b_K_x = None
         self.b_K_i = b_K_i
         self.kT_K = kT_K
         self.kT_target = kT_target
@@ -175,54 +175,54 @@ class TRAMData( object ):
 
     ############################################################################
     #
-    #   u_I_x getter and helper functions
+    #   b_K_x getter and helper functions
     #
     ############################################################################
 
     @property
-    def u_I_x( self ):
-        if self._u_I_x is None:
+    def b_K_x( self ):
+        if self._b_K_x is None:
             if self.verbose:
                 print "# Copying bias energy sequences"
             if not self.kT_K is None:
-                self.gen_u_I_x_from_kT_K()
+                self.gen_b_K_x_from_kT_K()
             else:
-                self.gen_u_I_x()
+                self.gen_b_K_x()
             if self.verbose:
                 print "# ... done"
-        return self._u_I_x
+        return self._b_K_x
 
-    def gen_u_I_x( self ):
-        self._u_I_x = np.zeros( shape=(self.n_therm_states,self.N_K.sum()), dtype=np.float64 )
+    def gen_b_K_x( self ):
+        self._b_K_x = np.zeros( shape=(self.n_therm_states,self.N_K.sum()), dtype=np.float64 )
         a = 0
         for traj in self.trajs:
-            if traj['u'].shape[1] == 1:
+            if traj['b'].shape[1] == 1:
                 raise ExpressionError(
-                        "u_I_x",
+                        "b_K_x",
                         "Trajectory with single energy columns detected - use kT file and kT target"
                     )
-            if traj['u'].shape[1] != self.n_therm_states:
+            if traj['b'].shape[1] != self.n_therm_states:
                 raise ExpressionError(
-                        "u_I_x",
+                        "b_K_x",
                         "Trajectory with wrong number of energy columns detected (%d!=%d)" \
-                        % ( traj['u'].shape[1], self.n_therm_states )
+                        % ( traj['b'].shape[1], self.n_therm_states )
                     )
-            b = a + traj['u'].shape[0]
-            self._u_I_x[:,a:b] = traj['u'][:,:].transpose().copy()
+            b = a + traj['b'].shape[0]
+            self._b_K_x[:,a:b] = traj['b'][:,:].transpose().copy()
             a = b
 
-    def gen_u_I_x_from_kT_K( self ):
-        u_x = np.zeros( shape=(self.N_K.sum(),), dtype=np.float64 )
+    def gen_b_K_x_from_kT_K( self ):
+        b_x = np.zeros( shape=(self.N_K.sum(),), dtype=np.float64 )
         a = 0
         for traj in self.trajs:
-            b = a + traj['u'].shape[0]
-            u_x[a:b] = traj['u'][:,0]
+            b = a + traj['b'].shape[0]
+            b_x[a:b] = traj['b'][:,0]
             a = b
         for K in xrange( self.kT_K.shape[0] ):
-            u_x[( self.T_x == K )] *= self.kT_K[K]
-        self._u_I_x = np.zeros( shape=(self.kT_K.shape[0],self.N_K.sum()), dtype=np.float64 )
-        for I in xrange( self.kT_K.shape[0] ):
-            self._u_I_x[I,:] = ( 1.0/self.kT_K[I] - 1.0/self.kT_K[self.kT_target] ) * u_x[:]
+            b_x[( self.T_x == K )] *= self.kT_K[K]
+        self._b_K_x = np.zeros( shape=(self.kT_K.shape[0],self.N_K.sum()), dtype=np.float64 )
+        for K in xrange( self.kT_K.shape[0] ):
+            self._b_K_x[K,:] = ( 1.0/self.kT_K[K] - 1.0/self.kT_K[self.kT_target] ) * b_x[:]
 
 
 

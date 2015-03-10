@@ -75,15 +75,15 @@ class Reader( object ):
                         print "# ... truncating to length=%d" % self.maxlength
                 m = content[:length,0].astype( np.intc, copy=True )
                 t = content[:length,1].astype( np.intc, copy=True )
-                u = None
+                b = None
                 if content.shape[1] > 2:
-                    u = np.copy( content[:length,2:] )
+                    b = np.copy( content[:length,2:] )
                 if self.verbose:
-                    if None == u:
+                    if None == b:
                         print "# ... no energy data"
                     else:
                         print "# ... %d energy column(s)" % ( content.shape[1] - 2 )
-                self._trajs.append( { 'm': m, 't': t, 'u': u } )
+                self._trajs.append( { 'm': m, 't': t, 'b': b } )
         return self._trajs
 
     ############################################################################
