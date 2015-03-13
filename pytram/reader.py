@@ -57,7 +57,7 @@ class Reader( object ):
     @property
     def trajs( self ):
         if self._trajs is None:
-            self._trajs= []
+            self._trajs = []
             for f in self.files:
                 if self.verbose:
                     print "# Reading file <%s>" % f
@@ -69,7 +69,7 @@ class Reader( object ):
                 length = content.shape[0]
                 if self.verbose:
                     print "# ... length=%d" % length
-                if ( None != self.maxlength ) and ( self.maxlength < length ):
+                if ( None is not self.maxlength ) and ( self.maxlength < length ):
                     length = self.maxlength
                     if self.verbose:
                         print "# ... truncating to length=%d" % self.maxlength
