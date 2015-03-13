@@ -96,19 +96,18 @@ class XTRAM( Estimator ):
     #
     ############################################################################
 
-    def sc_iteration( self , ftol=10e-4, maxiter = 10, verbose = False):
-        r"""Main iteration method
+    def sc_iteration( self , maxiter=100, ftol=1.0E-5, verbose = False):
+        r"""
+        sc_iteration function
+
         Parameters
         ----------
-            ftol : float
-                tolerance of the free energy difference of each iteration update
-                Default : 10e-10
-            maxiter : int
-                maximum number of iterations
-                Default : 10
-            verbose : boolean
-                Be loud and noisy
-                Default = False
+        maxiter : int
+            maximum number of self-consistent-iteration steps
+        ftol : float (> 0.0)
+            convergence criterion based on the max relative change in an self-consistent-iteration step
+        verbose : boolean
+            Be loud and noisy
         """
         finc = 0.0
         f_old = np.zeros( self.f_K.shape[0] )
