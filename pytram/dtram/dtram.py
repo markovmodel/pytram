@@ -58,12 +58,12 @@ class DTRAM( Estimator ):
     ############################################################################
 
     @property
-    def pi_i( self ):
-        return np.exp( -self._f_i )
+    def f_i( self ):
+        return self._f_i
 
     @property
-    def pi_K_i( self ):
-        return np.exp( -( self.f_K[:,np.newaxis] + self._b_K_i + self._f_i[np.newaxis,:] ) )
+    def f_K_i( self ):
+        return self.f_K[:,np.newaxis] + self._b_K_i + self._f_i[np.newaxis,:]
 
     @property
     def f_K( self ):
@@ -72,9 +72,23 @@ class DTRAM( Estimator ):
         f_K_equation( self._b_K_i, self._f_i, scratch_j, _f_K )
         return _f_K
 
+    ############################################################################
+    #
+    #   getters for dTRAM-specific properties
+    #
+    ############################################################################
+
+    @property
+    def b_K_i( self ):
+        return self._b_K_i
+
+    @property
+    def gamma_K_i( self ):
+        return np.exp( -self.b_K_i )
+
     @property
     def nu_K_i( self ):
-        return None
+        return np.exp( self._log_nu_K_i )
 
     ############################################################################
     #
@@ -157,7 +171,7 @@ class DTRAM( Estimator ):
 
     ############################################################################
     #
-    #   gamma_K_i sanity checks and getter
+    #   gamma_K_i sanity checks
     #
     ############################################################################
 
@@ -175,8 +189,4 @@ class DTRAM( Estimator ):
         if np.float64 != b_K_i.dtype:
             raise ExpressionError( "b_K_i", "invalid dtype (%s)" % str( b_K_i.dtype ) )
         return True
-
-    @property
-    def gamma_K_i( self ):
-        return np.exp( -self._b_K_i )
 
