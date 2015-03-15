@@ -42,7 +42,7 @@ The standard file format assumes text files with the following layout. ::
    # The next lines indicates the meaning of the columns,
    # [M] denotes Markov state indices (starting from zero),
    # [T] denotes thermodynamic state indices (starting from zero),
-   # and [b_K] denotes the reduced bias energies u_K/kT
+   # and [b_K] denotes the reduced bias energies b_K/kT
    # [M]  [T]  [b_0]  [b_1]  ... 
       0    0    3.1   18.2
       1    0    3.2   18.3
