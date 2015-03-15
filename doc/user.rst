@@ -42,8 +42,8 @@ The standard file format assumes text files with the following layout. ::
    # The next lines indicates the meaning of the columns,
    # [M] denotes Markov state indices (starting from zero),
    # [T] denotes thermodynamic state indices (starting from zero),
-   # and [u_I] denotes the reduced bias energies u_I/kT
-   # [M]  [T]  [u_0]  [u_1]  ... 
+   # and [b_K] denotes the reduced bias energies u_K/kT
+   # [M]  [T]  [b_0]  [b_1]  ... 
       0    0    3.1   18.2
       1    0    3.2   18.3
       2    0    4.8   19.9
@@ -63,7 +63,7 @@ temperature as the only thermodynamic variable, and all other thermodynamic cond
 Temperature as only thermodynamic variable
 ------------------------------------------
 
-In this case, you need the ``[M]`` and ``[T]`` columns, and one energy column ``[u_K]``; this column contains the reduced energy sequence. The energy is reduced according to the generating thermodynamic state. For example, the entry ``2  5  20.5`` denotes that the actual sample corresponds to the Markov state ``2``, was generated at temperature ``kT_5``, and the corresponding energy was reduced with ``kT_5``.
+In this case, you need the ``[M]`` and ``[T]`` columns, and one energy column ``[b_K]``; this column contains the reduced energy sequence. The energy is reduced according to the generating thermodynamic state. For example, the entry ``2  5  20.5`` denotes that the actual sample corresponds to the Markov state ``2``, was generated at temperature ``kT_5``, and the corresponding energy was reduced with ``kT_5``.
 
 **Important note**: for temperature-dependent simulations, you need an additional single column ``kT`` file wich indicates all generating temperatures times the Boltzmann constant (consistent with your energy units). Note that the order of ``kT`` values must be constistent with the numbering of the thermodynamic states.
 
