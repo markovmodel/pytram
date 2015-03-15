@@ -41,3 +41,8 @@ Version 0.1.7 (Beta)
     Added stationary property getters to Estimator. Removed unsafe setters from Estimator classes.
     Added kT switch in TRAMData. Moved sanity checks to Estimator classes' constructors.
     Standardised verbose printouts.
+
+Version 0.2.0 (Beta)
+
+    Introducing logsumexp summation scheme fro dTRAM. Interface cleanup (uniform getters, citation,
+    naming conventions).
