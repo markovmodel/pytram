@@ -10,20 +10,27 @@ Installation guide
 
 There are different ways to install the pytram package.
 
-
-
-From the repository
-===================
-
-First step: get the repository!
+From the python package index
+=============================
 
 Go to your shell and type
 
 .. code-block:: bash
 
-   git clone https://github.com/markovmodel/pytram.git
+   pip install pytram
 
-Then, install the package from source.
+or
+
+.. code-block:: bash
+
+   easy_install pytram
+
+Possible pitfalls can be the 'Cython' dependency. In case the installation fails,
+try to install Cython via the package index as well, by typing into your shell:
+
+.. code-block:: bash
+
+   pip install cython
 
 
 via pip
@@ -51,20 +58,21 @@ To build the C-extensions in place, you can also run
 
    python setup.py build_ext --inplace
 
+From the repository
+===================
 
-
-From the python package index
-=============================
+First step: get the repository!
 
 Go to your shell and type
 
 .. code-block:: bash
 
-   pip install pytram
+   git clone https://github.com/markovmodel/pytram.git
 
-or
+Then, install the package from source.
 
-.. code-block:: bash
+If you expereince any other difficulties with the installation, please email us using the mailing list pytram@lists.fu-berlin.de.
+Ideally provide us with some basic information about your operating system/python distribution, so that we can try and reproduce your issues. 
 
-   easy_install pytram
+
 
