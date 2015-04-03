@@ -20,7 +20,7 @@ from . import NotConvergedWarning, ExpressionError
 #
 ####################################################################################################
 
-def dtram_me( C_K_ij, b_K_i, maxiter=100, ftol=1.0E-5, verbose=False ):
+def dtram_from_matrix( C_K_ij, b_K_i, maxiter=100, ftol=1.0E-5, verbose=False ):
     r"""
     The dTRAM API function
     
@@ -95,7 +95,7 @@ def dtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, verbo
     dtram_obj : object
         dTRAM estimator object with optimised unbiased stationary probabilities
     """
-    return dtram_me( tramdata.get_C_K_ij( lag ), tramdata.b_K_i, maxiter=maxiter, ftol=ftol, verbose=verbose )
+    return dtram_from_matrix( tramdata.get_C_K_ij( lag ), tramdata.b_K_i, maxiter=maxiter, ftol=ftol, verbose=verbose )
 
 
 ####################################################################################################
@@ -104,7 +104,7 @@ def dtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, verbo
 #
 ####################################################################################################
 
-def xtram_me( C_K_ij, b_K_x, T_x, M_x, N_K_i, maxiter=100, ftol=1.0E-5, target = 0, verbose=False ):
+def xtram_from_matrix( C_K_ij, b_K_x, T_x, M_x, N_K_i, maxiter=100, ftol=1.0E-5, target = 0, verbose=False ):
     r"""
     The xTRAM API function
     
@@ -188,7 +188,7 @@ def xtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, targe
     xtram_obj : object
         xTRAM estimator object with optimised unbiased stationary probabilities
     """
-    return xtram_me(
+    return xtram_from_matrix(
             tramdata.get_C_K_ij( lag ),
             tramdata.b_K_x,
             tramdata.T_x,

@@ -16,5 +16,5 @@ from .dtram import DTRAM
 from .xtram import XTRAM
 
 # raise the API function onto the pytram level
-from .api import dtram, dtram_me, xtram, xtram_me
+from .api import dtram, dtram_from_matrix, xtram, xtram_from_matrix
 
