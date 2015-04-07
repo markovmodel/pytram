@@ -3,6 +3,9 @@ python:
   - "2.7"
 # command to install dependencies
 install:
-  - "pip install ."
+  - "pip install -q numpy==1.7"
+  - "pip install -q cython==0.15"
+  - "pip install -q setuptools==0.6"
+  - "python setup.py develop"
 # command to run tests
 script: nosetests
