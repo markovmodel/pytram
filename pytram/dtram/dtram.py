@@ -22,19 +22,17 @@ from .ext import log_nu_K_i_setter, log_nu_K_i_equation, f_i_equation, p_K_ij_eq
 
 class DTRAM( Estimator ):
     r"""
-    The dTRAM estimator class
+    This is the DTRAM class
+
+    Parameters
+    ----------
+    C_K_ij : numpy.ndarray( shape=(T,M,M), dtype=numpy.intc )
+        transition counts between the M discrete Markov states for each of the T thermodynamic ensembles
+    b_K_i : numpy.ndarray( shape=(T,M), dtype=numpy.float64 )
+        bias energies in the T thermodynamic and M discrete Markov states
     """
+
     def __init__( self, C_K_ij, b_K_i ):
-        r"""
-        Initialize the DTRAM object
-        
-        Parameters
-        ----------
-        C_K_ij : numpy.ndarray( shape=(T,M,M), dtype=numpy.intc )
-            transition counts between the M discrete Markov states for each of the T thermodynamic ensembles
-        b_K_i : numpy.ndarray( shape=(T,M), dtype=numpy.float64 )
-            bias energies in the T thermodynamic and M discrete Markov states
-        """
         super( DTRAM, self ).__init__( C_K_ij )
         # this check raises an exception if b_K_i is not usable
         if self._check_b_K_i( b_K_i ):
@@ -102,11 +100,11 @@ class DTRAM( Estimator ):
         
         Parameters
         ----------
-        maxiter : int
+        maxiter : int (default=100)
             maximum number of self-consistent-iteration steps
-        ftol : float (> 0.0)
+        ftol : float (default=1.0E-5)
             convergence criterion based on the max relative change in an self-consistent-iteration step
-        verbose : boolean
+        verbose : boolean (default=False)
             writes convergence information to stdout during the self-consistent-iteration cycle
         """
         scratch_K_j = np.zeros( shape=(self.n_therm_states,self.n_markov_states), dtype=np.float64 )
@@ -183,9 +181,9 @@ class DTRAM( Estimator ):
         if 2 != b_K_i.ndim:
             raise ExpressionError( "b_K_i", "invalid number of dimensions (%d)" % b_K_i.ndim )
         if b_K_i.shape[0] != self.n_therm_states:
-            raise ExpressionError( "b_K_i", "unmatching number of thermodynamic states (%d,%d)" % (b_K_i.shape[0], self.n_therm_states) )
+            raise ExpressionError( "b_K_i", "not matching number of thermodynamic states (%d,%d)" % (b_K_i.shape[0], self.n_therm_states) )
         if b_K_i.shape[1] != self.n_markov_states:
-            raise ExpressionError( "b_K_i", "unmatching number of markov states (%d,%d)" % (b_K_i.shape[1], self.n_markov_states) )
+            raise ExpressionError( "b_K_i", "not matching number of markov states (%d,%d)" % (b_K_i.shape[1], self.n_markov_states) )
         if np.float64 != b_K_i.dtype:
             raise ExpressionError( "b_K_i", "invalid dtype (%s)" % str( b_K_i.dtype ) )
         return True

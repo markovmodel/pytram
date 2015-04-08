@@ -20,7 +20,12 @@ import numpy as np
 class Estimator( object ):
 
     r"""
-    I am the parent class for all estimators!
+    Estimator is the parent class for all estimators
+
+    Parameters
+    ----------
+    C_K_ij : numpy.ndarray( shape=(T,M,M), dtype=numpy.intc )
+        transition counts between the M discrete Markov states for each of the T thermodynamic ensembles
     """
     def __init__( self, C_K_ij ):
         # this check raises an exception if C_K_ij is not usable
@@ -32,6 +37,12 @@ class Estimator( object ):
         self.citation = []
 
     def cite( self, pre="" ):
+        r"""
+        Parameters
+        ----------
+        pre : string (default="")
+            prepend string for printing citation string
+        """
         for line in self.citation:
             print "%s%s" % ( pre, line )
 
@@ -115,7 +126,7 @@ class Estimator( object ):
 
 class ExpressionError( Exception ):
     r"""
-    Exception class for malformed exressions in the input
+    Exception class for malformed expressions in the input
     """
     def __init__( self, expression, msg ):
         self.expression = expression
