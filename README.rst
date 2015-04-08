@@ -2,6 +2,13 @@
 pytram
 ******
 
+.. image:: https://travis-ci.org/markovmodel/pytram.svg?branch=devel
+    :target: https://travis-ci.org/markovmodel/pytram
+.. image:: https://badge.fury.io/py/pytram.svg
+   :target: https://pypi.python.org/pypi/pytram
+.. image:: https://pypip.in/d/pytram/badge.svg
+   :target: https://pypi.python.org/pypi/pytram
+
 This python package implements the transition-based reweighting analyis method (TRAM) estimators.
 
 
