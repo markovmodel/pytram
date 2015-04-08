@@ -2,7 +2,21 @@
 pytram
 ******
 
-This is a python repository for the transition-based reweighting analyis method (TRAM) estimators.
+This python package implements the transition-based reweighting analyis method (TRAM) estimators.
+
+
+
+Installation
+============
+
+With pip from PyPI::
+
+   # you might have to install these dependencies manually
+   pip install cython
+   pip install numpy
+
+   # install pytram
+   pip install pytram
 
 
 
@@ -19,6 +33,7 @@ Authors
 
 References
 ==========
+
 * **dTRAM**: *Statistically optimal analysis of state-discretized trajectory data from multiple thermodynamic states*, Hao Wu, Antonia S.J.S. Mey, Edina Rosta, and Frank Noé, **J. Chem. Phys.** 141, 214106 (2014). 
 
     Download: <http://scitation.aip.org/content/aip/journal/jcp/141/21/10.1063/1.4902240>
