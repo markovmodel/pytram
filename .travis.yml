@@ -6,6 +6,6 @@ before_install:
   - "pip install -q cython"
   - "pip install -q numpy"
 install:
-  - "pip install -q ."
+  - "python setup.py install"
 # command to run tests
 script: nosetests
