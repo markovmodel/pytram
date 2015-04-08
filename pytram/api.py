@@ -30,11 +30,11 @@ def dtram_from_matrix( C_K_ij, b_K_i, maxiter=100, ftol=1.0E-5, verbose=False ):
         transition counts between the M discrete Markov states for each of the T thermodynamic ensembles
     b_K_i : numpy.ndarray( shape=(T,M), dtype=numpy.float64 )
         reduced bias energies at the T thermodynamic and M discrete Markov states
-    maxiter : int
+    maxiter : int (default=100)
         maximum number of SCF iteration steps during the optimisation of the stationary probabilities
-    ftol : float (> 0.0)
+    ftol : float (default=1.0E-5)
         convergence criterion based on the max change in an self-consistent-iteration step
-    verbose : boolean
+    verbose : boolean (default=False)
         writes convergence information to stdout during the self-consistent-iteration cycle
     
     Returns
@@ -79,15 +79,15 @@ def dtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, verbo
     ----------
     tramdata : object
         container/converter for TRAM input data
-    lag : int
+    lag : int (default=1)
         specify the lag time for C_K_ij calculation
-    sliding_window : boolean
+    sliding_window : boolean (default=true)
         use sliding windows to calculate C_K_ij
-    maxiter : int
+    maxiter : int (default=100)
         maximum number of SCF iteration steps during the optimisation of the stationary probabilities
-    ftol : float (> 0.0)
+    ftol : float (default=1.0E-5)
         convergence criterion based on the max change in an self-consistent-iteration step
-    verbose : boolean
+    verbose : boolean (default=False)
         writes convergence information to stdout during the self-consistent-iteration cycle
     
     Returns
@@ -104,7 +104,7 @@ def dtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, verbo
 #
 ####################################################################################################
 
-def xtram_from_matrix( C_K_ij, b_K_x, T_x, M_x, N_K_i, maxiter=100, ftol=1.0E-5, target = 0, verbose=False ):
+def xtram_from_matrix( C_K_ij, b_K_x, T_x, M_x, N_K_i, maxiter=100, ftol=1.0E-5, target=0, verbose=False ):
     r"""
     The xTRAM API function
     
@@ -120,13 +120,13 @@ def xtram_from_matrix( C_K_ij, b_K_x, T_x, M_x, N_K_i, maxiter=100, ftol=1.0E-5,
         Markov states over all sampled data of length L
     N_K_i : numpy.ndarray( shape=(T,M), dtype=numpy.intc )
         number of times a markov state (M) is seen in a thermodynamic state (T)
-    maxiter : int
+    maxiter : int (default=100)
         maximum number of self consistent iteration steps during the optimisation of the stationary probabilities
-    target : int
-        integer of the thermodynamic state for which results should be estiamted
-    ftol : float (> 0.0)
+    ftol : float (> 0.0) (default=1.0E-5)
         convergence criterion based on the max change in an self-consistent-iteration step
-    verbose : boolean
+    target : int (default=0)
+        integer of the thermodynamic state for which results should be estiamted
+    verbose : boolean (default=False)
         writes convergence information to stdout during the self-consistent-iteration cycle
     
     Returns
@@ -162,7 +162,7 @@ def xtram_from_matrix( C_K_ij, b_K_x, T_x, M_x, N_K_i, maxiter=100, ftol=1.0E-5,
 #
 ####################################################################################################
 
-def xtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, target = 0, verbose=False ):
+def xtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, target=0, verbose=False ):
     r"""
     The xTRAM API function
     
@@ -170,17 +170,17 @@ def xtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, targe
     ----------
     tramdata : object
         container/converter for TRAM input data
-    lag : int
+    lag : int (default=1)
         specify the lag time for C_K_ij calculation
-    sliding_window : boolean
+    sliding_window : boolean (default=True)
         use sliding windows to calculate C_K_ij
-    maxiter : int
+    maxiter : int (default=100)
         maximum number of SCF iteration steps during the optimisation of the stationary probabilities
-    ftol : float (> 0.0)
+    ftol : float (default=1.0E-5)
         convergence criterion based on the max change in an self-consistent-iteration step
-    target : int
+    target : int (default=0)
         integer of the thermodynamic state for which results should be estiamted
-    verbose : boolean
+    verbose : boolean (default=False)
         writes convergence information to stdout during the self-consistent-iteration cycle.
     
     Returns

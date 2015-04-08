@@ -5,8 +5,6 @@ r"""
 from .estimator import ExpressionError
 import numpy as np
 
-
-
 ####################################################################################################
 #
 #   TRAMDATA CLASS FOR STORING SEQUENTIAL SIMULATION DATA AND CONVERSION TO TRAM INPUT EXPRESSIONS
@@ -15,26 +13,28 @@ import numpy as np
 
 class TRAMData( object ):
     r"""
-    I am the TRAMData class
-    
+    Parameters
+    ----------
+    trajs : list of dictionaries
+        each dictionary contains the following entries:
+        'm' markov sequence in a 1-D numpy array of integers
+        't' thermodynamic sequence in a 1-D numpy array of integers
+        'b' reduced bias energy sequences in a 2-D numpy array of floats
+    b_K_i : numpy.ndarray( shape=(T,M), dtype=numpy.float64 ) (optional)
+        reduced bias energies at the T thermodynamic and M discrete Markov states
+    kT_K : numpy.ndarray( shape=(T), dtype=numpy.float64 ) (optional)
+        array of reduced temperatures of each thermodynamic state K
+    kT_target : int (optional)
+        integer of the thermodynamic state K of the kT_K array at which estimators observables should be
+        estimated
+    verbose : boolean (default=False)
+        be loud and noisy
+
     Notes
     -----
-    I convert/process the trajectory list of dictionaries into data types that are useful
-    
+    I convert/process the list of trajectory dictionaries into data types that are need for pytram estimators.
     """
     def __init__( self, trajs, b_K_i=None, kT_K=None, kT_target=None, verbose=False ):
-        r"""
-        Parameters
-        ----------
-        trajs : list of dictionaries
-            each dictionary contains the following entries:
-            'm' markov sequence in a 1-D numpy array of integers
-            't' thermodynamic sequence in a 1-D numpy array of integers
-            'b' reduced bias energy sequences in a 2-D numpy array of floats
-        b_K_i : 2D numpy array 
-            contains discrete reduced bias energies
-            Default = None
-        """
         self.trajs = trajs
         self._n_therm_states = None
         self._n_markov_states = None
@@ -112,7 +112,7 @@ class TRAMData( object ):
     def N_K( self ):
         if self._N_K is None:
             self._N_K = self.N_K_i.sum( axis=1 )
-        return self._N_K.astype(np.intc)
+        return self._N_K.astype( np.intc )
 
     ############################################################################
     #
@@ -150,13 +150,34 @@ class TRAMData( object ):
                 print "# ... done"
         return self._T_x
 
-    ############################################################################
-    #
-    #   C_K_ij getter method
-    #
-    ############################################################################
+    @property
+    def b_K_x( self ):
+        if self._b_K_x is None:
+            if self.verbose:
+                print "# Copying bias energy sequences"
+            if not self.kT_K is None:
+                self._gen_b_K_x_from_kT_K()
+            else:
+                self._gen_b_K_x()
+            if self.verbose:
+                print "# ... done"
+        return self._b_K_x
+
 
     def get_C_K_ij( self, lag, sliding_window=True ):
+        r"""
+        Parameters
+        ----------
+        lag : int
+            lagtime tau, at which the countmatrix should be evaluated
+        sliding_window : boolean (default=True)
+            lag is applied by mean of a sliding window or skipping data entries.
+
+        Returns
+        -------
+        C_K_ij : numpy.ndarray(shape=(T,M,M))
+            count matrices C_ij at each termodynamic state K
+        """
         C_K_ij = np.zeros(
                 shape=(self.n_therm_states,self.n_markov_states,self.n_markov_states),
                 dtype=np.intc
@@ -179,20 +200,8 @@ class TRAMData( object ):
     #
     ############################################################################
 
-    @property
-    def b_K_x( self ):
-        if self._b_K_x is None:
-            if self.verbose:
-                print "# Copying bias energy sequences"
-            if not self.kT_K is None:
-                self.gen_b_K_x_from_kT_K()
-            else:
-                self.gen_b_K_x()
-            if self.verbose:
-                print "# ... done"
-        return self._b_K_x
 
-    def gen_b_K_x( self ):
+    def _gen_b_K_x( self ):
         self._b_K_x = np.zeros( shape=(self.n_therm_states,self.N_K.sum()), dtype=np.float64 )
         a = 0
         for traj in self.trajs:
@@ -211,7 +220,7 @@ class TRAMData( object ):
             self._b_K_x[:,a:b] = traj['b'][:,:].transpose().copy()
             a = b
 
-    def gen_b_K_x_from_kT_K( self ):
+    def _gen_b_K_x_from_kT_K( self ):
         b_x = np.zeros( shape=(self.N_K.sum(),), dtype=np.float64 )
         a = 0
         for traj in self.trajs:
@@ -223,22 +232,3 @@ class TRAMData( object ):
         self._b_K_x = np.zeros( shape=(self.kT_K.shape[0],self.N_K.sum()), dtype=np.float64 )
         for K in xrange( self.kT_K.shape[0] ):
             self._b_K_x[K,:] = ( 1.0/self.kT_K[K] - 1.0/self.kT_K[self.kT_target] ) * b_x[:]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

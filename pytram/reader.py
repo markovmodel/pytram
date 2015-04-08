@@ -14,30 +14,26 @@ import numpy as np
 
 class Reader( object ):
     r"""
-    I am the Reader class
-    
+    Parameters
+    ----------
+    files : array_like
+        list of filenames of the to-be-imported trajectory files
+    b_K_i_file : string (optional)
+        name of the file with the discretised reduced bias energies (b_K_i)
+    kT_file : string (optional)
+        name of the file with kT values from a multi-temperature simulation
+    skiprows : int (default=0)
+        skip the leading lines
+    maxlength : int (optional)
+        limit the maximal number of samples to use
+    verbose : boolean (default=False)
+        show import progress
+
     Notes
     -----
     I import trajectories from a list of files
-    
     """
     def __init__( self, files, b_K_i_file=None, kT_file=None, skiprows=0, maxlength=None, verbose=False ):
-        r"""
-        Parameters
-        ----------
-        files : list of strings
-            names of the to-be-imported trajectory files
-        b_K_i_file : string (optional)
-            name of the file with the discretised reduced bias energies (b_K_i)
-        kT_file : string (optional)
-            name of the file with kT values from a multi-temperature simulation
-        skiprows : int (optional)
-            skip the leading lines
-        maxlength : int (optional)
-            limit the maximal number of samples to use
-        verbose : boolean (optional)
-            show import progress
-        """
         self.files = files
         self.b_K_i_file = b_K_i_file
         self.kT_file = kT_file

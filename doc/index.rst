@@ -17,3 +17,5 @@ Contents:
    install
    user
    api
+   reader
+   tramdata
