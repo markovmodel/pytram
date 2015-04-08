@@ -1,24 +1,37 @@
 from setuptools import setup
 from distutils.core import Extension
-from Cython.Distutils import build_ext
-import numpy as np
+from sys import exit as sys_exit
+
+try:
+    from Cython.Distutils import build_ext
+except ImportError:
+    print "ERROR - please install the cython dependency manually:"
+    print "pip install cython"
+    sys_exit( 1 )
+
+try:
+    from numpy import get_include as np_get_include
+except ImportError:
+    print "ERROR - please install the numpy dependency manually:"
+    print "pip install numpy"
+    sys_exit( 1 )
 
 ext_lse = Extension(
         "pytram.lse",
         sources=["ext/lse/lse.pyx", "ext/lse/_lse.c" ],
-        include_dirs=[np.get_include()],
+        include_dirs=[np_get_include()],
         extra_compile_args=["-O3"]
     )
 ext_dtram = Extension(
         "pytram.dtram.ext",
         sources=["ext/dtram/dtram.pyx", "ext/dtram/_dtram.c", "ext/lse/_lse.c" ],
-        include_dirs=[np.get_include()],
+        include_dirs=[np_get_include()],
         extra_compile_args=["-O3"]
     )
 ext_xtram = Extension(
         "pytram.xtram.ext",
         sources=["ext/xtram/xtram.pyx", "ext/xtram/_xtram.c" ],
-        include_dirs=[np.get_include()],
+        include_dirs=[np_get_include()],
         extra_compile_args=["-O3"]
     )
 
