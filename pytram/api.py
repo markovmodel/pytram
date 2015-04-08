@@ -181,7 +181,7 @@ def xtram( tramdata, lag=1, sliding_window=True, maxiter=100, ftol=1.0E-5, targe
     target : int
         integer of the thermodynamic state for which results should be estiamted
     verbose : boolean
-        writes convergence information to stdout during the self-consistent-iteration cycle
+        writes convergence information to stdout during the self-consistent-iteration cycle.
     
     Returns
     -------
