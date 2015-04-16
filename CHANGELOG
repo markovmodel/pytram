@@ -46,3 +46,7 @@ Version 0.2.0 (Beta)
 
     Introducing logsumexp summation scheme fro dTRAM. Interface cleanup (uniform getters, citation,
     naming conventions).
+
+Version 0.2.1 (Beta)
+    
+    Fix compilation under MS Visual Studio 
