@@ -1,4 +1,6 @@
-__version__='0.2.0'
+from ._version import get_versions
+__version__ = get_versions()['version']
+del get_versions
 
 # raise custom exceptions onto the pytram package level
 from .estimator import ExpressionError, NotConvergedWarning
@@ -18,3 +20,7 @@ from .xtram import XTRAM
 # raise the API function onto the pytram level
 from .api import dtram, dtram_from_matrix, xtram, xtram_from_matrix
 
+
+from ._version import get_versions
+__version__ = get_versions()['version']
+del get_versions

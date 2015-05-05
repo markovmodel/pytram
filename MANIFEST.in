@@ -3,3 +3,5 @@ include CHANGELOG
 include ext/lse/_lse.h
 include ext/dtram/_dtram.h
 include ext/xtram/_xtram.h
+include versioneer.py
+include pytram/_version.py
