@@ -6,7 +6,6 @@ ext/dtram/dtram.c
 ext/xtram/xtram.c
 .ipynb_checkpoints
 pytram.egg-info
-setup.cfg
 doc/_build
 dist/
 .DS_Store
