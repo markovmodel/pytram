@@ -49,4 +49,5 @@ Version 0.2.0 (Beta)
 
 Version 0.2.1 (Beta)
     
-    Fix compilation under MS Visual Studio 
+    Fix compilation under MS Visual Studio. Refactoring API functions: use _from_matrix instead
+    of _me versions.
