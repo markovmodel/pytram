@@ -8,6 +8,14 @@
 
 #include "_lse.h"
 
+// old m$ visual studio is not c99 compliant (vs2010 eg. is not)
+#ifdef _MSC_VER
+	#include <math.h>
+	#include <float.h>
+	#define INFINITY (DBL_MAX+DBL_MAX)
+	#define NAN (INFINITY-INFINITY)
+#endif
+
 void _sort( double *array, int L, int R )
 {
     int l, r;
