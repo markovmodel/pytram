@@ -1,6 +1,7 @@
 from setuptools import setup
 from distutils.core import Extension
 from sys import exit as sys_exit
+import versioneer
 
 try:
     from Cython.Distutils import build_ext
@@ -36,14 +37,14 @@ ext_xtram = Extension(
     )
 
 setup(
-    cmdclass={'build_ext': build_ext},
+    cmdclass={'build_ext': build_ext, 'get_cmdclass': versioneer.get_cmdclass()},
     ext_modules=[
             ext_lse,
             ext_dtram,
             ext_xtram
         ],
     name='pytram',
-    version='0.2.0',
+    version=versioneer.get_version(),
     description='The TRAM package',
     long_description='The python interface to the TRAM framework for estimating Markov state models from biased MD simulations.',
     classifiers=[
