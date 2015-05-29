@@ -4,8 +4,8 @@ pytram
 
 .. image:: https://travis-ci.org/markovmodel/pytram.svg?branch=devel
    :target: https://travis-ci.org/markovmodel/pytram
-.. image:: https://coveralls.io/repos/markovmodel/pytram/badge.svg
-   :target: https://coveralls.io/r/markovmodel/pytram
+.. image:: https://coveralls.io/repos/markovmodel/pytram/badge.svg?branch=devel
+   :target: https://coveralls.io/r/markovmodel/pytram?branch=travis_test
 .. image:: https://badge.fury.io/py/pytram.svg
    :target: https://pypi.python.org/pypi/pytram
 .. image:: https://pypip.in/d/pytram/badge.svg
