@@ -1,25 +1,27 @@
 language: python
-
 python:
-  - 2.7
-
+- 2.7
 before_install:
-  - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
-  - bash miniconda.sh -b
-  - export PATH=$HOME/miniconda/bin:$PATH
-  - conda update --yes conda
-  # The next couple lines fix a crash with multiprocessing on Travis and are not specific to using Miniconda
-  - sudo rm -rf /dev/shm
-  - sudo ln -s /run/shm /dev/shm
-
+- wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+- bash miniconda.sh -b
+- export PATH=$HOME/miniconda/bin:$PATH
+- conda update --yes conda
+- sudo rm -rf /dev/shm
+- sudo ln -s /run/shm /dev/shm
 install:
-  - conda install --yes python=$TRAVIS_PYTHON_VERSION numpy scipy cython nose
-  - python setup.py develop
-  - pip install coveralls
-
-# command to run tests
+- conda install --yes python=$TRAVIS_PYTHON_VERSION numpy scipy cython nose
+- python setup.py develop
+- pip install coveralls
 script:
-  - coverage run --source=pytram setup.py test
-
+- coverage run --source=pytram setup.py test
 after_success:
-  - coveralls
+- coveralls
+deploy:
+  provider: pypi
+  user: pytram-user
+  password:
+    secure: DvPBURR5UMZoPYIo6A4nzG8urqHwJHKYSxpDlvuzrSD6R/KJHUkK6ednpa0/IhUY5ZaU7/8lQ3uLijLwZXC8HFC/Cjbv72B0jf5NHpPJx84Uuem6krEf+bfr7QajWWieYffcCD4wGfBEO2IRIQFmVKu5Y1Y/n0Eo4Krg8YuprIs=
+  on:
+    tags: true
+    repo: markovmodel/pytram
+    branch: master
