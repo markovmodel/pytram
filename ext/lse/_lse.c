@@ -16,6 +16,7 @@
 	#define NAN (INFINITY-INFINITY)
 #endif
 
+/* _sort()is based on examples from http://www.linux-related.de (2004) */
 void _sort( double *array, int L, int R )
 {
     int l, r;
