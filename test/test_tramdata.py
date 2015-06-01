@@ -31,3 +31,24 @@ def test_N_K_i():
     assert_true(np.all(td.N_K_i == 1))
     assert_true(np.all(td.N_K == 4))
     assert_true(td.N_K.sum() == 12)
+
+def test_get_C_K_ij_lag1():
+    """test transition counts at lag time 1"""
+    trajs = [{'m': np.array([0, 1, 2, 0], dtype=np.intc), 't': np.zeros(shape=(4,), dtype=np.intc)}]
+    td = TRAMData(trajs)
+    C_K_ij = np.array([[[0, 1, 0], [0, 0, 1], [1, 0, 0]]], dtype=np.intc)
+    assert_true(np.all(C_K_ij == td.get_C_K_ij(1)))
+
+def test_get_C_K_ij_lag2():
+    """test transition counts at lag time 2"""
+    trajs = [{'m': np.array([0, 1, 2, 0], dtype=np.intc), 't': np.zeros(shape=(4,), dtype=np.intc)}]
+    td = TRAMData(trajs)
+    C_K_ij = np.array([[[0, 0, 1], [1, 0, 0], [0, 0, 0]]], dtype=np.intc)
+    assert_true(np.all(C_K_ij == td.get_C_K_ij(2)))
+
+def test_get_C_K_ij_lag3():
+    """test transition counts at lag time 3"""
+    trajs = [{'m': np.array([0, 1, 2, 0], dtype=np.intc), 't': np.zeros(shape=(4,), dtype=np.intc)}]
+    td = TRAMData(trajs)
+    C_K_ij = np.array([[[1, 0, 0], [0, 0, 0], [0, 0, 0]]], dtype=np.intc)
+    assert_true(np.all(C_K_ij == td.get_C_K_ij(3)))
