@@ -51,3 +51,7 @@ Version 0.2.1 (Beta)
     
     Fix compilation under MS Visual Studio. Refactoring API functions: use _from_matrix instead
     of _me versions.
+
+Version 0.2.2 (Beta)
+    
+    Fix for sign error in f_K calculations. Partially fixing bad code style.
