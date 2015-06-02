@@ -81,7 +81,7 @@ class XTRAM(Estimator):
 
     @property
     def f_K(self):
-        return self._f_K
+        return -self._f_K
 
     ############################################################################
     #
