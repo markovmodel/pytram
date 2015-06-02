@@ -69,7 +69,7 @@ class DTRAM(Estimator):
         _f_K = np.zeros(shape=(self.n_therm_states,), dtype=np.float64)
         scratch_j = np.zeros(shape=(self.n_markov_states,), dtype=np.float64)
         f_K_equation(self._b_K_i, self._f_i, scratch_j, _f_K)
-        return _f_K
+        return -_f_K
 
     ############################################################################
     #
