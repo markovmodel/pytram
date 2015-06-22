@@ -58,6 +58,8 @@ class XTRAM(Estimator):
         self._f_K = self._compute_f_K()
         self._pi_K_i = self._compute_pi_K_i()
         self.target = target
+        self._maxiter = 100000
+        self._ftol = 1.0e-15
         # citation information
         self.citation = [
             "xTRAM: Estimating Equilibrium Expectations from Time-Correlated Simulation",
