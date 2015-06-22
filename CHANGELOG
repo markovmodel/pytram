@@ -55,3 +55,7 @@ Version 0.2.1 (Beta)
 Version 0.2.2 (Beta)
     
     Fix for sign error in f_K calculations. Partially fixing bad code style.
+
+Version 0.2.3 (Beta)
+
+    Fix iteration variables of iterat_x in constructor of XTRAM
