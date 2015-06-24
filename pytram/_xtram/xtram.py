@@ -75,11 +75,11 @@ class XTRAM(Estimator):
 
     @property
     def pi_i(self):
-        return self.pi_K_i[self.target] / self.pi_K_i[self.target].sum()
+        return self.pi_K_i[self.target]
 
     @property
     def pi_K_i(self):
-        return self._pi_K_i
+        return self._pi_K_i / self._pi_K_i.sum(axis=1)[:, np.newaxis]
 
     @property
     def f_K(self):
@@ -167,15 +167,15 @@ class XTRAM(Estimator):
         for K in xrange(self.n_therm_states):
             initial = K * self.n_markov_states
             final = K * self.n_markov_states + self.n_markov_states
-            self.pi_K_i[K][:] = pi_curr[initial:final] / np.sum(pi_curr[:])
+            self._pi_K_i[K][:] = pi_curr[initial:final] / np.sum(pi_curr[:])
 
     def _update_free_energies(self):
         r"""
         computes the free energies based on the current pi_K_i
         """
         for K in xrange(self.f_K.shape[0]):
-            self.f_K[K] = self.f_K[K] - np.log(
-                (np.sum(self.N_K).astype(float) / self.N_K[K]) * (np.sum(self.pi_K_i[K, :])))
+            self._f_K[K] = self._f_K[K] - np.log(
+                (np.sum(self.N_K).astype(float) / self.N_K[K]) * (np.sum(self._pi_K_i[K, :])))
 
     ####################################################################
     #                                                                  #
@@ -349,7 +349,7 @@ class XTRAM(Estimator):
     ####################################################################
         
     def _compute_w_K(self):
-        return self.N_K.astype(float) / np.sum(self.N_K)
+        return self.N_K.astype(np.float64) / np.sum(self.N_K)
         #weight array based on thermodynamics sample counts
 
     ####################################################################
