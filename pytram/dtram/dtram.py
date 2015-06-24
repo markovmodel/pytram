@@ -62,7 +62,7 @@ class DTRAM(Estimator):
 
     @property
     def f_K_i(self):
-        return self.f_K[:, np.newaxis] + self._b_K_i + self._f_i[np.newaxis, :]
+        return -self.f_K[:, np.newaxis] + self._b_K_i + self._f_i[np.newaxis, :]
 
     @property
     def f_K(self):
