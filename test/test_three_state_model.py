@@ -30,7 +30,7 @@ def evolve_chain(x, P, length):
 def assign_bias(dtraj, b_K_i):
     """assigns bias energies to discrete trajectories"""
     b = np.zeros(shape=(dtraj.shape[0], b_K_i.shape[0]), dtype=np.float64)
-    for i in xrange(b_K_i.shape[0]):
+    for i in xrange(b_K_i.shape[1]):
         b[(dtraj == i), :] = (b_K_i[:, i])[np.newaxis, :]
     return b
 
@@ -77,7 +77,7 @@ class TestThreeStateModel(object):
     def test_dtram_api(self):
         """testing the dTRAM API"""
         tramdata = TRAMData(self.inp, b_K_i=self.b_K_i)
-        dtram_obj = dtram(tramdata, lag=1, maxiter=100000, ftol=1.0E-15)
+        dtram_obj = dtram(tramdata, lag=1, maxiter=100000, ftol=1.0E-14)
         maxerr = 1.0E-1
         assert_true(np.allclose(dtram_obj.f_i, self.f_i, maxerr))
         assert_true(np.allclose(dtram_obj.pi_i, self.pi_i, maxerr))
