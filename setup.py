@@ -24,13 +24,13 @@ ext_lse = Extension(
         extra_compile_args=["-O3"]
     )
 ext_dtram = Extension(
-        "pytram.dtram.ext",
+        "pytram._dtram.ext",
         sources=["ext/dtram/dtram.pyx", "ext/dtram/_dtram.c", "ext/lse/_lse.c" ],
         include_dirs=[np_get_include()],
         extra_compile_args=["-O3"]
     )
 ext_xtram = Extension(
-        "pytram.xtram.ext",
+        "pytram._xtram.ext",
         sources=["ext/xtram/xtram.pyx", "ext/xtram/_xtram.c" ],
         include_dirs=[np_get_include()],
         extra_compile_args=["-O3"]
@@ -83,8 +83,8 @@ setup(
     install_requires=[ 'numpy>=1.7.1' ],
     packages=[
             'pytram',
-            'pytram.dtram',
-            'pytram.xtram'
+            'pytram._dtram',
+            'pytram._xtram'
         ],
     test_suite='nose.collector',
     scripts=[

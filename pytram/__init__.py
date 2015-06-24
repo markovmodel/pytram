@@ -13,10 +13,10 @@ from .reader import Reader
 from .tramdata import TRAMData
 
 # raise the dTRAM estimator class onto the pytram package level
-from .dtram import DTRAM
+from ._dtram import DTRAM
 
 # raise the xTRAM estimator class onto the pytram package level
-from .xtram import XTRAM
+from ._xtram import XTRAM
 
 # raise the API function onto the pytram level
 from .api import dtram, dtram_from_matrix, xtram, xtram_from_matrix

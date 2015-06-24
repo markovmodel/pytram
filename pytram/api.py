@@ -8,8 +8,8 @@ API for the TRAM package
 .. moduleauthor:: Antonia Mey <antonia.mey@fu-berlin.de>
 """
 
-from .dtram import DTRAM
-from .xtram import XTRAM
+from ._dtram import DTRAM
+from ._xtram import XTRAM
 from . import NotConvergedWarning, ExpressionError
 
 
