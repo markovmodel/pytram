@@ -87,7 +87,7 @@ class TestThreeStateModel(object):
     def test_xtram_api(self):
         """testing the xTRAM API"""
         tramdata = TRAMData(self.inp)
-        xtram_obj = xtram(tramdata, lag=1, maxiter=10000, ftol=1.0E-13, verbose=True)
+        xtram_obj = xtram(tramdata, lag=1, maxiter=10000, ftol=1.0E-13)
         maxerr = 1.0E-1
         assert_true(np.allclose(xtram_obj.f_i, self.f_i, maxerr))
         assert_true(np.allclose(xtram_obj.pi_i, self.pi_i, maxerr))
