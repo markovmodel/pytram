@@ -59,3 +59,9 @@ Version 0.2.2 (Beta)
 Version 0.2.3 (Beta)
 
     Fix iteration variables of iterat_x in constructor of XTRAM
+
+Version 0.2.4 (Beta) *in progress*
+
+    Fix normalisation in biased thermodynamic states. Extended the test suite. Renaming the dtram
+    xtram modules (pytram/dtram -> pytram/_dtram & pytram/xtram -> pytram/_xtram) to prevent a name
+    space clash with the pytram.dtram and pytram.xtram API functions (fixes #43).
