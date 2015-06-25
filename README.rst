@@ -8,8 +8,6 @@ pytram
    :target: https://coveralls.io/r/markovmodel/pytram?branch=devel
 .. image:: https://badge.fury.io/py/pytram.svg
    :target: https://pypi.python.org/pypi/pytram
-.. image:: https://pypip.in/d/pytram/badge.svg
-   :target: https://pypi.python.org/pypi/pytram
 
 This python package implements the transition-based reweighting analyis method (TRAM) estimators.
 
@@ -18,7 +16,12 @@ This python package implements the transition-based reweighting analyis method (
 Installation
 ============
 
-With pip from PyPI::
+Using conda::
+
+   conda install -c https://conda.binstar.org/omnia pytram
+
+
+Using pip from PyPI::
 
    # you might have to install these dependencies manually
    pip install cython
@@ -27,6 +30,15 @@ With pip from PyPI::
    # install pytram
    pip install pytram
 
+
+Using pip from github (this will install the latest development version)::
+
+   # you might have to install these dependencies manually
+   pip install cython
+   pip install numpy
+
+   # install pytram - this might be slow
+   pip install git+https://github.com/markovmodel/pytram.git@devel
 
 
 Authors
