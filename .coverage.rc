@@ -1,3 +1,2 @@
 [report]
-omit =
-	_version.py
+omit = */_version.py
