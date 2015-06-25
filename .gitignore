@@ -9,3 +9,4 @@ pytram.egg-info
 doc/_build
 dist/
 .DS_Store
+.coverage
