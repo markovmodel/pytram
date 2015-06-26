@@ -7,8 +7,7 @@
 ################################################################################
 
 from nose.tools import assert_raises, assert_true, assert_equal
-from pytram import TRAMData
-from pytram import dtram, xtram
+from pytram import TRAMData, dtram, xtram
 import numpy as np
 
 def tower_sample(distribution):
@@ -77,6 +76,7 @@ class TestThreeStateModel(object):
     def test_dtram_api(self):
         """testing the dTRAM API"""
         tramdata = TRAMData(self.inp, b_K_i=self.b_K_i, verbose=True)
+        dtram_obj = dtram(tramdata, lag=1, maxiter=1, ftol=1.0E-14, verbose=True)
         dtram_obj = dtram(tramdata, lag=1, maxiter=100000, ftol=1.0E-14, verbose=True)
         maxerr = 1.0E-1
         assert_true(np.allclose(dtram_obj.f_i, self.f_i, maxerr))
@@ -87,6 +87,7 @@ class TestThreeStateModel(object):
     def test_xtram_api(self):
         """testing the xTRAM API"""
         tramdata = TRAMData(self.inp, verbose=True)
+        xtram_obj = xtram(tramdata, lag=1, maxiter=1, ftol=1.0E-13, verbose=True)
         xtram_obj = xtram(tramdata, lag=1, maxiter=10000, ftol=1.0E-13, verbose=True)
         maxerr = 1.0E-1
         assert_true(np.allclose(xtram_obj.f_i, self.f_i, maxerr))
