@@ -9,6 +9,7 @@
 from nose.tools import assert_raises, assert_true, assert_equal
 from pytram import TRAMData, dtram, xtram
 import numpy as np
+from numpy.testing import assert_allclose
 
 def tower_sample(distribution):
     """draws random integers from the given distribution"""
@@ -55,6 +56,7 @@ class TestThreeStateModel(object):
         cls.pi_i = np.exp(-cls.energy) / np.exp(-cls.energy).sum()
         cls.f_i = -np.log(cls.pi_i)
         cls.F_K = 1.0 / (np.exp(-cls.b_K_i) * cls.pi_i[np.newaxis, :]).sum(axis=1)
+        cls.f_K = np.log(cls.F_K)
         cls.pi_K_i = cls.F_K[:, np.newaxis] * np.exp(-cls.b_K_i) * cls.pi_i[np.newaxis, :]
         cls.f_K_i = -np.log(cls.pi_K_i)
         metropolis = cls.energy[np.newaxis, :] - cls.energy[:, np.newaxis]
@@ -79,18 +81,20 @@ class TestThreeStateModel(object):
         dtram_obj = dtram(tramdata, lag=1, maxiter=1, ftol=1.0E-14, verbose=True)
         dtram_obj = dtram(tramdata, lag=1, maxiter=100000, ftol=1.0E-14, verbose=True)
         maxerr = 1.0E-1
-        assert_true(np.allclose(dtram_obj.f_i, self.f_i, maxerr))
-        assert_true(np.allclose(dtram_obj.pi_i, self.pi_i, maxerr))
-        assert_true(np.allclose(dtram_obj.f_K_i, self.f_K_i, maxerr))
-        assert_true(np.allclose(dtram_obj.pi_K_i, self.pi_K_i, maxerr))
-        assert_true(np.allclose(dtram_obj.estimate_transition_matrices(), self.tmat, maxerr))
+        assert_allclose(dtram_obj.f_K, self.f_K, atol=maxerr)
+        assert_allclose(dtram_obj.f_i, self.f_i, atol=maxerr)
+        assert_allclose(dtram_obj.pi_i, self.pi_i, atol=maxerr)
+        assert_allclose(dtram_obj.f_K_i, self.f_K_i, atol=maxerr)
+        assert_allclose(dtram_obj.pi_K_i, self.pi_K_i, atol=maxerr)
+        assert_allclose(dtram_obj.estimate_transition_matrices(), self.tmat, atol=maxerr)
     def test_xtram_api(self):
         """testing the xTRAM API"""
         tramdata = TRAMData(self.inp, verbose=True)
         xtram_obj = xtram(tramdata, lag=1, maxiter=1, ftol=1.0E-13, verbose=True)
         xtram_obj = xtram(tramdata, lag=1, maxiter=10000, ftol=1.0E-13, verbose=True)
         maxerr = 1.0E-1
-        assert_true(np.allclose(xtram_obj.f_i, self.f_i, maxerr))
-        assert_true(np.allclose(xtram_obj.pi_i, self.pi_i, maxerr))
-        assert_true(np.allclose(xtram_obj.f_K_i, self.f_K_i, maxerr))
-        assert_true(np.allclose(xtram_obj.pi_K_i, self.pi_K_i, maxerr))
+        #assert_allclose(xtram_obj.f_K, self.f_K, atol=maxerr)
+        assert_allclose(xtram_obj.f_i, self.f_i, atol=maxerr)
+        assert_allclose(xtram_obj.pi_i, self.pi_i, atol=maxerr)
+        assert_allclose(xtram_obj.f_K_i, self.f_K_i, atol=maxerr)
+        assert_allclose(xtram_obj.pi_K_i, self.pi_K_i, atol=maxerr)
