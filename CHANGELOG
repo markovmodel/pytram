@@ -65,3 +65,8 @@ Version 0.2.4 (Beta)
     Fix normalisation in biased thermodynamic states. Extended the test suite. Renaming the dtram
     xtram modules (pytram/dtram -> pytram/_dtram & pytram/xtram -> pytram/_xtram) to prevent a name
     space clash with the pytram.dtram and pytram.xtram API functions (fixes #43).
+
+Version 0.2.5 (Beta)
+
+    Fixes broken __version__ on PyPI (#45). Migration to container-based infrastructure on Travis.
+    Covering f_K in unit tests.
