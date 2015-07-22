@@ -36,8 +36,11 @@ ext_xtram = Extension(
         extra_compile_args=["-O3"]
     )
 
+cmd_class = versioneer.get_cmdclass()
+cmd_class.update({'build_ext': build_ext})
+
 setup(
-    cmdclass={'build_ext': build_ext, 'get_cmdclass': versioneer.get_cmdclass()},
+    cmdclass=cmd_class,
     ext_modules=[
             ext_lse,
             ext_dtram,
