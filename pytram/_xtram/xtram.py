@@ -10,8 +10,8 @@ xTRAM estimator module
 
 import numpy as np
 import warnings
-from pyemma.thermo.pytram.estimator import Estimator, NotConvergedWarning, ExpressionError
-from pyemma.thermo.pytram.xtram.impl_c.xtram import b_i_IJ_equation, iterate_x
+from pytram.estimator import Estimator, NotConvergedWarning, ExpressionError
+from .ext import b_i_IJ_equation, iterate_x
 
 
 
@@ -61,8 +61,9 @@ class XTRAM(Estimator):
         self._f_K = self._init_f_K()
         self._pi_K_i = self._compute_pi_K_i()
         self.target = target
-        self._maxiter = 100000
-        self._ftol = 1.0e-15
+        # inner iteration
+        self._maxiter_inner = 100000
+        self._ftol_inner = 1.0e-15
         # citation information
         self.citation = [
             "xTRAM: Estimating Equilibrium Expectations from Time-Correlated Simulation",
@@ -94,7 +95,7 @@ class XTRAM(Estimator):
     #
     ############################################################################
 
-    def sc_iteration(self, maxiter=100, ftol=1.0E-5, maxiter_inner=10000, ftol_inner=1.0E-8, verbose=False):
+    def sc_iteration(self, maxiter=100, ftol=1.0E-5, verbose=False):
         r"""
         sc_iteration function
 
@@ -126,8 +127,8 @@ class XTRAM(Estimator):
             ferr = iterate_x(
                 N_tilde.shape[0],
                 x_row.shape[0],
-                self._maxiter,
-                self._ftol,
+                self._maxiter_inner,
+                self._ftol_inner,
                 C_i,
                 C_j,
                 C_ij,
@@ -284,7 +285,6 @@ class XTRAM(Estimator):
         N_tilde : numpy 2d-array
             N-4 numpy array containing the count matrix N-tilde
         """
-
         N_tilde = []
         for I in xrange(self.n_therm_states):
             for i in xrange(self.n_markov_states):
