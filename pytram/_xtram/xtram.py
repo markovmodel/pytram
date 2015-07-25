@@ -9,7 +9,8 @@ xTRAM estimator module
 """
 
 import numpy as np
-from ..estimator import Estimator, NotConvergedWarning, ExpressionError
+import warnings
+from pytram.estimator import Estimator, NotConvergedWarning, ExpressionError
 from .ext import b_i_IJ_equation, iterate_x
 
 
@@ -54,12 +55,15 @@ class XTRAM(Estimator):
         if self._check_N_K_i(N_K_i):
             self._N_K_i = N_K_i.astype(np.intc)
         self._N_K = np.sum(N_K_i, axis=1).astype(np.intc)
+        self._N = np.sum(self._N_K)
+        self.n_samples = len(M_x)
         self.w_K = self._compute_w_K()
-        self._f_K = self._compute_f_K()
+        self._f_K = self._init_f_K()
         self._pi_K_i = self._compute_pi_K_i()
         self.target = target
-        self._maxiter = 100000
-        self._ftol = 1.0e-15
+        # inner iteration
+        self._maxiter_inner = 100000
+        self._ftol_inner = 1.0e-15
         # citation information
         self.citation = [
             "xTRAM: Estimating Equilibrium Expectations from Time-Correlated Simulation",
@@ -107,22 +111,24 @@ class XTRAM(Estimator):
         """
         finc = 0.0
         f_old = np.zeros(self.f_K.shape[0])
-        self.b_i_IJ = np.zeros(
-            shape=(self.n_markov_states, self.n_therm_states, self.n_therm_states))
+        self.b_i_IJ = np.zeros((self.n_markov_states, self.n_therm_states, self.n_therm_states), dtype=np.float64)
         if verbose:
             print "# %25s %25s" % ("[Step]", "[rel. Increment]")
         for i in xrange(maxiter):
             f_old[:] = self.f_K[:]
-            b_i_IJ_equation(
-                self.T_x, self.M_x, self.N_K, self.f_K, self.w_K, self.b_K_x, self.b_i_IJ)
+            # compute thermodynamic count matrix
+            self.b_i_IJ = self._count_matrices_thermo()
+            # TODO: should be fixed in C code that is currently skipped
+            # b_i_IJ_equation(
+            #     self.T_x, self.M_x, self.N_K, self.f_K, self.w_K, self.b_K_x, self.b_i_IJ)
             N_tilde = self._compute_sparse_N()
             C_i, C_j, C_ij, C_ji = self._compute_individual_N()
             x_row, c_column = self._initialise_X_and_N(N_tilde)
             ferr = iterate_x(
                 N_tilde.shape[0],
                 x_row.shape[0],
-                self._maxiter,
-                self._ftol,
+                self._maxiter_inner,
+                self._ftol_inner,
                 C_i,
                 C_j,
                 C_ij,
@@ -140,24 +146,24 @@ class XTRAM(Estimator):
             if finc < ftol:
                 break
         if finc > ftol:
-            raise NotConvergedWarning("XTRAM", finc)
+            warnings.warn("XTRAM only reached increment %.3e" % finc)
 
     def _initialise_X_and_N(self, N_tilde):
         r"""
             sets default values for x_i and N_i
         """
-        X_row = np.zeros(np.max(N_tilde[:, 0])+1)
-        N_column = np.zeros(np.max(N_tilde[:, 0])+1)
+        X_row = np.zeros(int(np.max(N_tilde[:, 0])+1))
+        N_column = np.zeros(int(np.max(N_tilde[:, 0])+1))
         for i in xrange(len(N_tilde)):
             entry = N_tilde[i]
             if entry[0] == entry[1]:
-                X_row[entry[0]] += (entry[2] + entry[3]) * 0.5
-                N_column[entry[0]] += entry[2]
+                X_row[int(entry[0])] += (entry[2] + entry[3]) * 0.5
+                N_column[int(entry[0])] += entry[2]
             else:
-                N_column[entry[0].astype(int)] += entry[2] #Check that this is the right summation!
-                N_column[entry[1].astype(int)] += entry[3]
-                X_row[entry[0]] += (entry[2] + entry[3]) * 0.5
-                X_row[entry[1]] += (entry[2] + entry[3]) * 0.5
+                N_column[int(entry[0])] += entry[2] #Check that this is the right summation!
+                N_column[int(entry[1])] += entry[3]
+                X_row[int(entry[0])] += (entry[2] + entry[3]) * 0.5
+                X_row[int(entry[1])] += (entry[2] + entry[3]) * 0.5
         return (X_row, N_column)
 
     def _update_pi_K_i(self, pi_curr):
@@ -182,6 +188,46 @@ class XTRAM(Estimator):
     # Computes the extended count matrix                               #
     #                                                                  #
     ####################################################################
+
+    #def _count_matrices_conf(ttrajs, dtrajs, lag):
+    #    import msmtools.estimation as msmest
+    #    nthermo = msmest.number_of_states(ttrajs)
+    #    nstates = msmest.number_of_states(dtrajs)
+    #    ntrajs = len(ttrajs)
+    #    Cs = np.zeros((nthermo, nstates, nstates), dtype=np.intc)
+    #    for i in xrange(ntrajs):
+    #        ttraj = ttrajs[i]
+    #        dtraj = dtrajs[i]
+    #        for t in xrange(len(ttraj)-lag):
+    #            Cs[ttraj[t], dtraj[t], dtraj[t+lag]] += 1
+    #    return Cs
+
+    def _count_matrices_thermo(self, metropolis=True):
+        """Computes count matrix between thermodynamic states
+        """
+        N_k = self._N_K.astype(float)
+        N = np.sum(N_k)
+        Bs = np.zeros((self.n_markov_states, self.n_therm_states, self.n_therm_states), dtype=np.float64)
+        for I in range(self.n_therm_states):
+            # get samples starting from I
+            indI = np.where(self._T_x == I)[0]
+            # look at all targets
+            p_IJ = np.zeros((self.n_therm_states, len(indI)))
+            for J in range(self.n_therm_states):
+                if I != J:
+                    if metropolis:
+                        p_IJ[J] = np.minimum(1.0, (N_k[J]/N_k[I]) * np.exp(self._f_K[J] - self._b_K_x[J, indI]
+                                                                           - self._f_K[I] + self._b_K_x[I, indI]))
+                        p_IJ[J] *= N_k[I]/N
+                    else:
+                        raise NotImplementedError()
+            p_IJ[I] = np.ones(len(indI)) - p_IJ.sum(axis=0)
+            # accumulate counts by discrete state
+            d_arr_i = self._M_x[indI]
+            for i in range(self.n_markov_states):
+                indi = np.where(d_arr_i == i)[0]
+                Bs[i, I, :] = p_IJ[:, indi].sum(axis=1)
+        return Bs
 
     def _compute_individual_N(self, factor=1.0):
         C_i = []
@@ -239,7 +285,6 @@ class XTRAM(Estimator):
         N_tilde : numpy 2d-array
             N-4 numpy array containing the count matrix N-tilde
         """
-
         N_tilde = []
         for I in xrange(self.n_therm_states):
             for i in xrange(self.n_markov_states):
@@ -281,74 +326,43 @@ class XTRAM(Estimator):
                         N_tilde.append(entry)
         return np.array(N_tilde)
 
-    ####################################################################
-    #                                                                  #
-    # Computes the initial guess of free energies vie bar ratios       #
-    #                                                                  #
-    ####################################################################
 
-    def _compute_f_K(self):
-        _f_K = np.ones(self.n_therm_states)
-        bar_ratio = self._bar_ratio()
-        for I in xrange(1, self.n_therm_states):
-            _f_K[I] = _f_K[I-1] - np.log(bar_ratio[I-1])
-        return _f_K
-
-    ####################################################################
-    #                                                                  #
-    # Computes BAR ratios                                              #
-    #                                                                  #
-    ####################################################################
-
-    def _bar_ratio(self):
-        bar_ratio = np.zeros(self.n_therm_states-1)
+    def _init_f_K(self):
+        """ Computes the initial guess of free energies via bar ratios
+        """
         I_plus_one = np.zeros(self.n_therm_states)
         I_minus_one = np.zeros(self.n_therm_states)
-        for x in xrange(self.T_x.shape[0]):
-            I = self.T_x[x]
-            if I == 0:
-                I_plus_one[I] += self._metropolis(self.b_K_x[I, x], self.b_K_x[I+1, x])
-            elif I == self.n_therm_states-1:
-                I_minus_one[I] += self._metropolis(self.b_K_x[I, x], self.b_K_x[I-1, x])
-            else:
-                I_plus_one[I] += self._metropolis(self.b_K_x[I, x], self.b_K_x[I+1, x])
-                I_minus_one[I] += self._metropolis(self.b_K_x[I, x], self.b_K_x[I-1, x])
-        for I in xrange(bar_ratio.shape[0]):
-            bar_ratio[I] = (I_plus_one[I] / I_minus_one[I+1]) \
-            *(self.N_K[I+1].astype('float') / self.N_K[I].astype('float'))
-        return bar_ratio
-
-    ####################################################################
-    #                                                                  #
-    # metropolis function                                              #
-    #                                                                  #
-    ####################################################################
+        for x in xrange(self.n_samples):
+            I = self._T_x[x]
+            if I > 0:
+                I_minus_one[I] += self._metropolis(self._b_K_x[I, x], self._b_K_x[I-1, x])
+            if I < self.n_therm_states-1:
+                I_plus_one[I] += self._metropolis(self._b_K_x[I, x], self._b_K_x[I+1, x])
+        # compute BAR free energies
+        f_K = np.zeros(self.n_therm_states)
+        for I in xrange(1, self.n_therm_states):
+            bar_ratio = (I_plus_one[I-1] / float(self._N_K[I-1])) / (I_minus_one[I] / float(self._N_K[I]))
+            f_K[I] = f_K[I-1] - np.log(bar_ratio)
+        return f_K
 
     def _metropolis(self, u_1, u_2):
+        """ Metropolis function
+        """
         if (u_1 - u_2) > 0:
             return 1.0
         else:
             return np.exp(u_1 - u_2)
 
-    ####################################################################
-    #                                                                  #
-    # Initialises the stationary probabilities                         #
-    #                                                                  #
-    ####################################################################
-    
     def _compute_pi_K_i(self):
+        """Initializes the stationary probabilities
+        """
         _pi_K_i = np.ones(
             self.n_therm_states * self.n_markov_states).reshape(
                 self.n_therm_states, self.n_markov_states)
         return _pi_K_i
 
-    ####################################################################
-    #                                                                  #
-    # Computes the the weight at each thermoydnamic state              #
-    #                                                                  #
-    ####################################################################
-        
     def _compute_w_K(self):
+        """Computes the the weight at each thermodynamic state """
         return self.N_K.astype(np.float64) / np.sum(self.N_K)
         #weight array based on thermodynamics sample counts
 
