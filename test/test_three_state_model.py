@@ -93,7 +93,7 @@ class TestThreeStateModel(object):
         xtram_obj = xtram(tramdata, lag=1, maxiter=1, ftol=1.0E-13, verbose=True)
         xtram_obj = xtram(tramdata, lag=1, maxiter=10000, ftol=1.0E-13, verbose=True)
         maxerr = 1.0E-1
-        #assert_allclose(xtram_obj.f_K, self.f_K, atol=maxerr)
+        assert_allclose(xtram_obj.f_K, self.f_K, atol=maxerr)
         assert_allclose(xtram_obj.f_i, self.f_i, atol=maxerr)
         assert_allclose(xtram_obj.pi_i, self.pi_i, atol=maxerr)
         assert_allclose(xtram_obj.f_K_i, self.f_K_i, atol=maxerr)
