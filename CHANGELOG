@@ -70,3 +70,7 @@ Version 0.2.5 (Beta)
 
     Fixes broken __version__ on PyPI (#45). Migration to container-based infrastructure on Travis.
     Covering f_K in unit tests.
+
+Version 0.2.6 (Beta)
+
+    Fixes error in xTRAM (#44)
