@@ -20,3 +20,7 @@ from ._xtram import XTRAM
 
 # raise the API function onto the pytram level
 from .api import dtram, dtram_from_matrix, xtram, xtram_from_matrix
+
+import warnings
+warnings.warn("pytram is no longer supported; we recommend to use the PyEMMA package instead.")
+del warnings

@@ -2,6 +2,10 @@
 pytram
 ******
 
+The pytram package is decprecated and no longer supported. We recommend to switch to `PyEMMA <https://github.com/markovmodel/PyEMMA>`_.
+
+.. image:: http://badges.github.io/stability-badges/dist/deprecated.svg
+   :target: http://github.com/badges/stability-badges
 .. image:: https://travis-ci.org/markovmodel/pytram.svg?branch=devel
    :target: https://travis-ci.org/markovmodel/pytram
 .. image:: https://coveralls.io/repos/markovmodel/pytram/badge.svg?branch=devel

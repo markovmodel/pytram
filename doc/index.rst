@@ -7,6 +7,8 @@
 The pytram package
 ==================
 
+The pytram package is decprecated and no longer supported. We recommend to switch to `PyEMMA <https://github.com/markovmodel/PyEMMA>`_.
+
 This software offers the python interface to the TRAM methods family. TRAM (transition-based reweighting analysis method) is a collection of Markov state model (MSM) estimators for analysing multi-ensemble simulations. The pytram package is implemented mostly in `NumPy <http://www.numpy.org/>`_ and `SciPy <http://www.scipy.org>`_, with `Cython <http://www.cython.org/>`_-based C-extensions for numerically demanding tasks. For documentation of the API, please have a look at the :ref:`ref_api`. To install this software and additional dependencies refer to the :ref:`Installation Guide <ref_install>`. The :ref:`User Guide <ref_user>` is a good starting point to learn how to use TRAM. For support/bug reports/sugguestions/complains, please visit us at `GitHub <http://github.com/markovmodel/pytram/>`_.
 
 Contents:

@@ -173,7 +173,7 @@ void _p_K_ij_equation(
     int i, j, K;
     int MM = n_markov_states * n_markov_states, KMM, Ki, Kj, ij, ji;
     int CK;
-    double divisor, pKi;
+    double divisor, pKi, sum;
     for( K=0; K<n_therm_states; ++K )
     {
         KMM = K*MM;
@@ -209,8 +209,18 @@ void _p_K_ij_equation(
                 p_K_ij[KMM+ij] = exp( scratch_j[j] );
             }
             /* compute the diagonal elements from the other elements in this line */
-            p_K_ij[KMM+i*n_markov_states+i] = 1.0 - exp( _logsumexp( scratch_j, n_markov_states ) );
-        }
+            sum = exp( _logsumexp( scratch_j, n_markov_states ) );
+            if( 1.0 <= sum )
+            {
+                p_K_ij[KMM+i*n_markov_states+i] = 0.0;
+                for( j=0; j<n_markov_states; ++j )
+                    p_K_ij[KMM+i*n_markov_states+j] /= sum;
+            }
+            else
+            {
+                p_K_ij[KMM+i*n_markov_states+i] = 1.0 - sum;
+            }
+        }       
     }
 }
 

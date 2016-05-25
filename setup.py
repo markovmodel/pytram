@@ -51,7 +51,7 @@ setup(
     description='The TRAM package',
     long_description='The python interface to the TRAM framework for estimating Markov state models from biased MD simulations.',
     classifiers=[
-            'Development Status :: 4 - Beta',
+            'Development Status :: 7 - Inactive',
             'Environment :: Console',
             'Intended Audience :: Science/Research',
             'License :: OSI Approved :: BSD License',

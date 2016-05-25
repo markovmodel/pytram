@@ -11,6 +11,7 @@ dTRAM estimator module
 import numpy as np
 from ..estimator import Estimator, NotConvergedWarning, ExpressionError
 from .ext import log_nu_K_i_setter, log_nu_K_i_equation, f_i_equation, p_K_ij_equation, f_K_equation
+import warnings
 
 
 
@@ -34,6 +35,7 @@ class DTRAM(Estimator):
     """
 
     def __init__(self, C_K_ij, b_K_i):
+        warnings.warn("This Feature is deprecated and will be removed in the future; we recommend to use pyemma.thermo.DTRAM")
         super(DTRAM, self).__init__(C_K_ij)
         # this check raises an exception if b_K_i is not usable
         if self._check_b_K_i(b_K_i):

@@ -1,26 +1,23 @@
-language: python
-python:
-- 2.7
+language: c
 sudo: false
+env:
+  global:
+    - PATH=$HOME/miniconda/bin:$PATH
+matrix:
+  include:
+    - os: linux
+      python : "2.7"
+      env: CONDA_PY=27  CONDA_NPY=19
+    - os: linux
+      python : "2.7"
+      env: CONDA_PY=27  CONDA_NPY=110
 before_install:
-- wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
-- bash miniconda.sh -b
-- export PATH=$HOME/miniconda/bin:$PATH
-- conda update --yes conda
-install:
-- conda install --yes python=$TRAVIS_PYTHON_VERSION numpy scipy cython nose
-- python setup.py develop
-- pip install coveralls
+  - tools/install_miniconda.sh
+  - conda config --set always_yes true
+  - conda config --add channels omnia
+  - conda install conda-build nose
 script:
-- coverage run --source=pytram setup.py test
+  - conda build -q conda-recipe
 after_success:
-- coveralls
-deploy:
-  provider: pypi
-  user: pytram-user
-  password:
-    secure: DvPBURR5UMZoPYIo6A4nzG8urqHwJHKYSxpDlvuzrSD6R/KJHUkK6ednpa0/IhUY5ZaU7/8lQ3uLijLwZXC8HFC/Cjbv72B0jf5NHpPJx84Uuem6krEf+bfr7QajWWieYffcCD4wGfBEO2IRIQFmVKu5Y1Y/n0Eo4Krg8YuprIs=
-  on:
-    tags: true
-    repo: markovmodel/pytram
-    branch: master
+  - pip install coveralls
+  - coveralls
